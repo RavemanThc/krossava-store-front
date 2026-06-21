@@ -1,0 +1,151 @@
+.wrap {
+  position: relative;
+  max-width: 1440px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  margin: 0 auto;
+  justify-content: center;
+  gap: 5%;
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  max-width: 1440px;
+
+  gap: 12px;
+  list-style: none;
+  padding: 0;
+  padding-bottom: 20px;
+}
+
+.card {
+  position: relative;
+  width: 400px;
+  overflow: hidden;
+  border-radius: 4px;
+  cursor: pointer;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+  background-color: #222;
+}
+.cardId {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.card:hover {
+  transform: scale(1.02);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.image {
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+.title {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 10px;
+  margin: 0;
+  color: #fff;
+  font-size: 18px;
+  font-weight: bold;
+  background: rgba(0, 0, 0, 0.85);
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  box-sizing: border-box;
+  text-align: center;
+  transition: background 0.3s ease;
+}
+.wrapsize {
+  position: absolute;
+  top: 20%;
+  width: 15%;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  z-index: 10;
+}
+
+.wrapsize.leftSide {
+  left: 0%;
+}
+
+.wrapsize.rightSide {
+  right: 0%;
+}
+
+.sizebutton {
+  width: 100%;
+  padding: 5px;
+  background: rgba(72, 69, 76, 0.2);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(4.5px);
+  -webkit-backdrop-filter: blur(4.5px);
+  border: 1px solid rgba(72, 69, 76, 0.29);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition:
+    transform 0.3s cubic-bezier(0.075, 0.82, 0.165, 1),
+    background 0.3s ease;
+  margin-bottom: 5px;
+}
+
+.sizebutton:hover,
+.sizebutton:focus {
+  background: rgba(54, 43, 200, 0.2);
+  border: 1px solid rgba(54, 43, 200, 0.29);
+  transform: scale(1.05);
+}
+.card:hover .title {
+  background: rgba(0, 0, 0, 0.8);
+}
+.price {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: black;
+  width: 20%;
+  border-radius: 5px;
+  color: #fff;
+  text-align: center;
+}
+ul,
+ol,
+li {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.imageBox {
+  position: relative;
+  width: 100%;
+  height: 400px;
+  background: #fff; /* ключевое: НЕ черный фон */
+  overflow: hidden;
+}
+
+.imageBox img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.imgSpace {
+  position: absolute;
+  inset: 0;
+  background: #fff;
+}
