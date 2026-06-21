@@ -1,0 +1,82 @@
+.form {
+  width: 280px;
+  border: none;
+  background: rgba(54, 43, 200, 0.2);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(4.5px);
+  -webkit-backdrop-filter: blur(4.5px);
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+  border-radius: 25px;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+
+  align-items: center;
+  padding: 15px;
+}
+.fieldset {
+  border: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.label {
+  align-items: center;
+  text-align: center;
+}
+.field {
+  background: rgba(255, 255, 255, 0.999);
+  border: none;
+  border-radius: 4px;
+  backdrop-filter: blur(4.5px);
+  -webkit-backdrop-filter: blur(4.5px);
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+  text-align: center;
+  margin-bottom: 10px;
+}
+.field:focus {
+  background: rgba(98, 41, 171, 0.2);
+  outline: none;
+}
+.socialMedia {
+  display: block;
+  margin-bottom: 0;
+}
+.managerText {
+  margin-top: 0;
+  text-align: center;
+}
+
+.submitButton {
+  padding: 15px;
+  background: rgba(72, 69, 76, 0.2);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(4.5px);
+  -webkit-backdrop-filter: blur(4.5px);
+  border: 1px solid rgba(72, 69, 76, 0.29);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition:
+    transform 0.3s cubic-bezier(0.075, 0.82, 0.165, 1),
+    background 0.3s ease;
+  margin-bottom: 5px;
+}
+.submitButton:hover {
+  background: rgba(54, 43, 200, 0.2);
+  transform: scale(1.05);
+}
+
+.telegram {
+}
+.viber {
+}
+.instagram {
+}
