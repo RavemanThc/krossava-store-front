@@ -9,38 +9,38 @@ import OrderForm from "./OrderForm/OrderForm";
 
 function App() {
   const [search, setSearch] = useState("");
-  const [page, setPage] = useState(0); // 0-based для API
+  const [page, setPage] = useState(0);
 
   const { data, isLoading, isError } = useQuery({
-    queryKey: ["sneakers", search, page], // Каждая страница — отдельный кэш
+    queryKey: ["sneakers", search, page],
     queryFn: () => fetchSneackers({ search, page, perPage: 10 }),
-    // Предотвращает "мигание" интерфейса и прыжки экрана при смене страницы
     placeholderData: (keepPreviousData) => keepPreviousData,
   });
 
   const totalPages = data?.totalPages ?? 0;
   const sneakersToShow = data?.products || [];
 
-  const handleSearch = (query: string) => {
-    setSearch(query);
-    setPage(0); // При новом поиске всегда сбрасываем на 1-ю страницу
-  };
-
-  const handlePageChange = (newPage: number) => {
-    setPage(newPage - 1); // Переводим 1-based из компонента кнопки в 0-based для API
+  const handleSearch = async (newSearch: string) => {
+    setSearch(newSearch);
+    setPage(1);
   };
 
   return (
     <>
       <SearchBar onSubmit={handleSearch} />
+      <PaginationButton
+        totalPages={totalPages}
+        currentPage={page}
+        onPageChange={setPage}
+      />
       {isLoading && <p>Loading...</p>}
       {isError && <p>Error</p>}
       <SneakerGrid sneakers={sneakersToShow} onSelect={() => {}} />{" "}
       {totalPages > 1 && (
         <PaginationButton
           totalPages={totalPages}
-          currentPage={page + 1} // Переводим 0-based в 1-based для отображения
-          onPageChange={handlePageChange}
+          currentPage={page} // Переводим 0-based в 1-based для отображения
+          onPageChange={setPage}
         />
       )}
       <OrderForm />
