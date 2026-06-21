@@ -1,4 +1,3 @@
-import { useInfiniteQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import SearchBar from "../SearchBar/SearchBar";
 import SneakerGrid from "../MovieGrid/SneakerGrid";
@@ -26,8 +25,6 @@ function App() {
   const totalPages = data?.totalPages ?? 0;
   const hasNextPage = page + 1 < totalPages;
 
-  // Эффект для режима "Infinity": дописываем новые продукты в стейт
-  // ВАЖНО: При смене страницы обычной пагинацией мы будем заменять стейт, а при Load More — добавлять.
   const currentProducts = data?.products || [];
 
   const handleSearch = (query: string) => {
