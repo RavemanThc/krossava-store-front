@@ -1,16 +1,3 @@
-export interface Movie {
-  id: number;
-  poster_path: string;
-  backdrop_path: string;
-  title: string;
-  overview: string;
-  release_date: string;
-  vote_average: number;
-}
-export interface MovieHttpResponse {
-  results: Movie[];
-}
-
 export interface Size {
   size: string;
   quantity: number;
@@ -30,11 +17,12 @@ export interface Sneaker {
   id: string;
   groupId: string;
   title: string;
-  category: "nike" | "adidas" | "asics" | "new balance" | "Puma";
+  category: string;
   price: number;
   images: string[];
   description: string;
   sizes: Size[];
+  barcode: string;
 }
 export interface SneackerHttpResponse {
   page: number;
@@ -43,3 +31,10 @@ export interface SneackerHttpResponse {
   totalPages: number;
   products: Sneaker[];
 }
+export type CartItem = {
+  sneaker: Sneaker;
+  size: string;
+  quantity: number;
+};
+export type Category = string;
+export type CategoriesResponse = Category[];

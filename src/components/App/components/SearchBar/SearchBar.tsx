@@ -24,9 +24,13 @@ export default function SearchBar({ onSubmit }: SubmitFormProp) {
           target="_blank"
           rel="noopener noreferrer"
         >
-          KROSSAVA
+          <img
+            src="../../../../../public/Logo.webp"
+            width="140"
+            className={styles.logo}
+          />
         </a>
-        <form action={handleSearch}>
+        <form action={handleSearch} className={styles.form}>
           <input
             className={styles.input}
             type="text"

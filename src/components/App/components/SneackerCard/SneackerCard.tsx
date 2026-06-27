@@ -1,24 +1,34 @@
 import { useState } from "react";
-import type { Sneaker } from "../../types/sneaker";
+import type { Sneaker } from "../../../../types/sneaker";
 import css from "./SneackerCard.module.css";
 
-const SneackerCard = ({
-  sneaker,
-  onSelect,
-}: {
+interface SneackerCard {
   sneaker: Sneaker;
-  onSelect: () => void;
-}) => {
-  const [imgLoading, setImgLoading] = useState(true);
+  onSelect: (sneaker: Sneaker, size: string) => void;
+  onModal: (sneaker: Sneaker) => void;
+}
 
+const SneackerCard = ({ sneaker, onSelect, onModal }: SneackerCard) => {
+  const [imgLoading, setImgLoading] = useState(true);
+  console.log("Sneaker barcode values:", sneaker.title, sneaker.barcode);
+  const handleOpenModalClick: React.MouseEventHandler<HTMLLIElement> = () => {
+    onModal(sneaker);
+  };
   return (
-    <li key={sneaker.id} className={css.cardId}>
+    <li key={sneaker.id} className={css.cardId} onClick={handleOpenModalClick}>
       <div className={css.card}>
         {/* 1. Левый блок: берем первые 5 элементов, рендерим их слева */}
         <ul className={`${css.wrapsize} ${css.leftSide}`}>
           {sneaker.sizes.slice(0, 5).map((sizeObj, index) => (
             <li className={css.size} key={index}>
-              <button type="button" className={css.sizebutton}>
+              <button
+                type="button"
+                className={css.sizebutton}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onSelect(sneaker, sizeObj.size);
+                }}
+              >
                 {sizeObj.size}
               </button>
             </li>
@@ -29,7 +39,14 @@ const SneackerCard = ({
           <ul className={`${css.wrapsize} ${css.rightSide}`}>
             {sneaker.sizes.slice(5).map((sizeObj, index) => (
               <li className={css.size} key={index}>
-                <button type="button" className={css.sizebutton}>
+                <button
+                  type="button"
+                  className={css.sizebutton}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onSelect(sneaker, sizeObj.size);
+                  }}
+                >
                   {sizeObj.size}
                 </button>
               </li>
@@ -58,7 +75,7 @@ const SneackerCard = ({
         <h2 className={css.title}>{sneaker.title}</h2>
       </div>
       <p className={css.price}>{sneaker.price}</p>
-      <button onClick={onSelect}>Open Modal</button>
+      <p className={css.barcode}>Артикль: {sneaker.barcode}</p>
     </li>
   );
 };
