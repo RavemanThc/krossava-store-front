@@ -24,11 +24,7 @@ export default function SearchBar({ onSubmit }: SubmitFormProp) {
           target="_blank"
           rel="noopener noreferrer"
         >
-          <img
-            src="../../../../../public/Logo.webp"
-            width="140"
-            className={styles.logo}
-          />
+          <img src="/Logo.webp" width="140" className={styles.logo} />
         </a>
         <form action={handleSearch} className={styles.form}>
           <input
