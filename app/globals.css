@@ -20,6 +20,8 @@ body {
   overflow-x: hidden;
   min-height: 100dvh;
   margin: 0;
+  background: #fff;
+  color: #000;
 }
 main {
   flex: 1;
