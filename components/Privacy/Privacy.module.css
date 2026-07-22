@@ -1,0 +1,112 @@
+.privacy {
+  padding: 32px 16px 48px;
+}
+
+.privacyWrap {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.privacySubWrap {
+  background: #fff;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+.privacySubWrap h1 {
+  margin-bottom: 24px;
+  font-size: 28px;
+  text-align: center;
+  color: #222;
+}
+
+.privacySubWrap p {
+  margin-bottom: 14px;
+  font-size: 15px;
+  line-height: 1.75;
+  color: #444;
+}
+
+.privacySubWrap p:last-child {
+  margin-bottom: 0;
+}
+
+.privacySubWrap b {
+  color: #111;
+  font-weight: 700;
+}
+.privacySubWrap ul {
+  margin: 16px 0 20px;
+  padding-left: 24px;
+}
+
+.privacySubWrap li {
+  list-style: disc;
+  margin-bottom: 10px;
+  font-size: 15px;
+  line-height: 1.75;
+  color: #444;
+}
+
+.privacySubWrap li:last-child {
+  margin-bottom: 0;
+}
+
+@media (min-width: 768px) {
+  .privacySubWrap ul {
+    padding-left: 28px;
+  }
+
+  .privacySubWrap li {
+    font-size: 16px;
+    line-height: 1.85;
+  }
+}
+
+@media (min-width: 768px) {
+  .privacy {
+    padding: 48px 24px 64px;
+  }
+
+  .privacySubWrap {
+    padding: 40px;
+  }
+
+  .privacySubWrap h1 {
+    font-size: 36px;
+    margin-bottom: 32px;
+  }
+
+  .privacySubWrap p {
+    font-size: 16px;
+    line-height: 1.85;
+  }
+}
+
+@media (min-width: 1024px) {
+  .privacy {
+    padding: 64px 32px 80px;
+  }
+
+  .privacyWrap {
+    max-width: 1000px;
+  }
+
+  .privacySubWrap {
+    padding: 48px 56px;
+    border-radius: 20px;
+  }
+
+  .privacySubWrap h1 {
+    font-size: 42px;
+  }
+  .privacySubWrap li {
+    font-size: 17px;
+    line-height: 1.9;
+  }
+  .privacySubWrap p {
+    font-size: 17px;
+    line-height: 1.9;
+  }
+}

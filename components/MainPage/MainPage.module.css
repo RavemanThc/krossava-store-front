@@ -1,0 +1,76 @@
+.HeroWrap {
+  height: 50vh;
+  padding: 0 20px;
+  position: relative;
+}
+.HerosubWrap {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 15%;
+}
+.titleWrap {
+  margin-top: 10vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+.title {
+  font-size: 20px;
+  text-align: start;
+}
+.subtitle {
+  font-size: 20px;
+  color: rgb(65, 59, 59);
+}
+.icon {
+  width: 160px;
+}
+.HeroImage {
+  position: absolute;
+  right: -40px;
+  bottom: -20px;
+  width: 320px;
+  height: 220px;
+}
+@media (min-width: 1024px) {
+  .HeroWrap {
+    height: 600px;
+    padding: 0 20px;
+    position: relative;
+  }
+  .HerosubWrap {
+    height: 70%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 30px;
+  }
+  .titleWrap {
+    margin-top: 0;
+
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+  }
+  .title {
+    width: unset;
+    font-size: 36px;
+  }
+  .icon {
+    width: 320px;
+  }
+  .subtitle {
+    font-size: 24px;
+    color: rgb(65, 59, 59);
+  }
+  .HeroImage {
+    position: absolute;
+    right: -40px;
+    bottom: -20px;
+    width: auto;
+    height: auto;
+  }
+}

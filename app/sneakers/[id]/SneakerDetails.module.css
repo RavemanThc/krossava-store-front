@@ -1,0 +1,145 @@
+.CardSection {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-around;
+}
+.photo {
+  margin-top: 50px;
+  width: 60%;
+  height: 20%;
+  object-position: center;
+  object-fit: cover;
+  border-radius: 12px;
+  border: 1px dotted black;
+}
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  text-align: center;
+  align-items: center;
+}
+.sizebutton {
+  width: 100%;
+  padding: 5px;
+
+  background: rgba(72, 69, 76, 0.2);
+  border-radius: 16px;
+
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(4.5px);
+  -webkit-backdrop-filter: blur(4.5px);
+
+  border: 1px solid rgba(72, 69, 76, 0.29);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.3s ease,
+    background 0.3s ease;
+  margin-bottom: 5px;
+}
+
+.sizebutton:hover,
+.sizebutton:focus {
+  background: black;
+  color: white;
+  transform: scale(1.05);
+}
+.sizebutton:active {
+  background: black;
+  color: white;
+}
+.wrapsize {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+.title {
+  width: 80%;
+  font-size: 24px;
+}
+.price {
+  font-size: 24px;
+  font-weight: bold;
+}
+.backbutton {
+  position: absolute;
+  top: 5px;
+  left: 15px;
+  background-color: black;
+  color: white;
+  border-radius: 8px;
+  padding: 5px;
+}
+.orderButton {
+  width: 200px;
+  padding: 25px;
+  font-size: 18px;
+  background-color: black;
+  color: white;
+  border-radius: 10px;
+  cursor: pointer;
+}
+@media (min-width: 1024px) {
+  .CardSection {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-around;
+  }
+  .photo {
+    width: 40%;
+    height: 400px;
+    object-position: center;
+    object-fit: cover;
+    border-radius: 12px;
+    border: 1px dotted black;
+  }
+  .content {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    text-align: center;
+    align-items: center;
+  }
+  .wrapsize {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+  }
+  .title {
+    width: 500px;
+  }
+  .price {
+    font-size: 24px;
+    font-weight: bold;
+  }
+  .backbutton {
+    position: absolute;
+    top: 5px;
+    left: 15px;
+    background-color: black;
+    color: white;
+    border-radius: 8px;
+    padding: 5px;
+  }
+  .orderButton {
+    width: 200px;
+    padding: 25px;
+    font-size: 18px;
+    background-color: black;
+    color: white;
+    border-radius: 10px;
+    cursor: pointer;
+  }
+}

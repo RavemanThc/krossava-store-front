@@ -1,0 +1,64 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  align-items: center;
+}
+.fieldset {
+  display: flex;
+  flex-direction: column;
+  border: none;
+  align-items: center;
+}
+.field {
+  border-radius: 8px;
+  border: 1px solid black;
+  margin-bottom: 5px;
+}
+.submitButton {
+  cursor: pointer;
+  width: 150px;
+  background: black;
+  color: white;
+  border-radius: 16px;
+  box-shadow: 0 16px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(4.5px);
+  font-size: 20px;
+  padding: 10px;
+  -webkit-backdrop-filter: blur(4.5px);
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+.error {
+  text-align: center;
+  align-items: center;
+  color: red;
+}
+.submitButton:hover {
+  background: rgba(54, 43, 200, 0.2);
+  color: black;
+  transform: scale(1.05);
+}
+
+.submitButton.active:hover {
+  background: rgba(54, 43, 200, 0.2);
+  color: black;
+
+  transform: scale(1.05);
+}
+.managerText {
+  width: 75%;
+
+  margin-bottom: 15px;
+}
+@media (min-width: 1024px) {
+  .field {
+    height: 28px;
+    margin-bottom: 20px;
+  }
+  .inputname {
+    margin-bottom: 5px;
+    font-weight: bold;
+  }
+}

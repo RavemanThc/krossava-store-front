@@ -1,0 +1,139 @@
+.filterallwrap {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.filterWrap {
+  display: flex;
+  flex-wrap: nowrap;
+
+  overflow-x: auto;
+  overflow-y: hidden;
+
+  -webkit-overflow-scrolling: touch;
+
+  gap: 8px;
+  padding: 8px 10px;
+
+  /* Скрытие скроллбара */
+  scrollbar-width: none;
+}
+
+.filterWrap::-webkit-scrollbar {
+  display: none;
+}
+
+.filterButton,
+.categoryButton {
+  flex: 0 0 auto;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 36px;
+  padding: 6px 12px;
+  border-radius: 16px;
+  background: rgba(72, 69, 76, 0.2);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(4.5px);
+  -webkit-backdrop-filter: blur(4.5px);
+  transition: 0.2s ease;
+  cursor: pointer;
+  border: none;
+}
+.categoryButton:hover,
+.categoryButton:focus,
+.filterButton:hover,
+.filterButton:focus {
+  background: rgba(71, 65, 142, 0.25);
+}
+.active {
+  background: rgba(54, 43, 200, 0.25);
+  transform: scale(1.05);
+}
+
+.title {
+  align-items: center;
+  display: block;
+  margin: 0 auto;
+  font-size: 24px;
+}
+.dropdown {
+  background: rgba(72, 69, 76, 0.2);
+  border-radius: 16px;
+  width: fit-content;
+  margin-left: 10px;
+  position: relative;
+  display: flex;
+  margin-right: 15px;
+  margin-bottom: 15px;
+}
+
+.dropdownButton {
+  padding: 10px 16px;
+  cursor: pointer;
+}
+
+.dropdownMenu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 15px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  min-width: 120px;
+
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0 8px 20px rgb(0 0 0 / 12%);
+  z-index: 100;
+  align-items: center;
+}
+
+.dropdownMenu button {
+  padding: 8px;
+  text-align: left;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  width: 95%;
+  text-align: center;
+}
+
+.dropdownMenu button:hover {
+  background: #f5f5f5;
+}
+.dropdownMenu button:focus,
+.dropdownMenu button:hover {
+  background: rgba(54, 43, 200, 0.25);
+}
+.dropdownMenu button.active {
+  background: rgba(54, 43, 200, 0.25);
+  font-weight: 700;
+}
+.dropIcon {
+  transition: transform 0.3s ease;
+}
+.dropIcon.rotate {
+  transform: rotate(180deg);
+}
+/* PC */
+@media (min-width: 1024px) {
+  .dropdown {
+    font-size: 12px;
+  }
+  .filterWrap {
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .title {
+    align-items: center;
+    display: block;
+    margin: 0 auto;
+    font-size: 36px;
+  }
+}
