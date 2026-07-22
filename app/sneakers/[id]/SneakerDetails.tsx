@@ -20,7 +20,7 @@ const SneakerDetailsClient = ({ sneaker }: Props) => {
   };
   const handleAddToCart = () => {
     if (!selectedSize) {
-      toast.error("Выбери размер");
+      toast.error("Оберіть розмір");
       return;
     }
 
@@ -30,9 +30,8 @@ const SneakerDetailsClient = ({ sneaker }: Props) => {
       quantity: 1,
     });
 
-    toast.success("Добавлено в корзину");
+    toast.success("додано в кошик");
   };
-  console.log("DETAILS SNEAKER:", sneaker);
   return (
     <>
       <section className={css.CardSection}>

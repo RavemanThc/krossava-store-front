@@ -9,12 +9,7 @@ export default function SneakerClient({ sneakers }: { sneakers: Sneaker[] }) {
 
   return (
     <>
-      <SneakerGrid
-        sneakers={sneakers}
-        onSelect={(sneaker, size) => {
-          console.log("add to cart", sneaker, size);
-        }}
-      />
+      <SneakerGrid sneakers={sneakers} onSelect={(sneaker, size) => {}} />
     </>
   );
 }

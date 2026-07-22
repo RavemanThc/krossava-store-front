@@ -14,9 +14,8 @@ interface SneackerCard {
 const SneackerItem = ({ sneaker, onSelect }: SneackerCard) => {
   const [imgLoading, setImgLoading] = useState(true);
 
-  console.log("GRID SNEAKER:", sneaker);
   return (
-    <li className="css.listitem">
+    <li className={css.listitem}>
       <Link href={`/sneakers/${sneaker.id}`} className={css.linkWrap}>
         <div className={css.card}>
           {/* 1. Левый блок: берем первые 5 элементов, рендерим их слева */}
@@ -66,13 +65,13 @@ const SneackerItem = ({ sneaker, onSelect }: SneackerCard) => {
                 opacity: imgLoading ? 0 : 1,
                 transition: "opacity 0.2s ease",
               }}
-              alt={sneaker.name}
+              alt={sneaker.title}
               width={600}
               height={600}
               sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 363px"
             />
           </div>
-          <h2 className={css.title}>{sneaker.name}</h2>
+          <h2 className={css.title}>{sneaker.title}</h2>
         </div>
         <ul className={`${css.wrapsizemob} ${css.leftSide}`}>
           {sneaker.sizes.map((sizeObj, index) => (

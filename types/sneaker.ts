@@ -16,6 +16,7 @@ export interface SneackerQueryParams {
 export interface Sneaker {
   id: string;
   groupId: string;
+  title: string;
   name: string;
   category: string;
   price: number;
