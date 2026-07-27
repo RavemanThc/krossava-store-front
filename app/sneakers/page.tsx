@@ -21,7 +21,7 @@ export async function generateMetadata({
   const { search, category, size, page } = await searchParams;
 
   let title = "Каталог кросівок | Krossava";
-  let description = "Каталог брендових кросівок з доставкою по Україні.";
+  let description = "Каталог брендових кросівок з доставкою по Україні | Adidas, Nike, New Balance. ";
 
   if (category) {
     title = `${category} — купити кросівки | Krossava`;
@@ -33,28 +33,29 @@ export async function generateMetadata({
     description = `Результати пошуку "${search}" в магазині Krossava.`;
   }
 
+  const params = new URLSearchParams();
+
+  if (search) params.set("search", search);
+  if (category) params.set("category", category);
+  if (size) params.set("size", size);
+
+  // page=1 не добавляем
+  if (page && page !== "1") {
+    params.set("page", page);
+  }
+
+  const canonical = params.toString()
+    ? `/sneakers?${params.toString()}`
+    : "/sneakers";
+
   return {
     title,
     description,
     alternates: {
-      canonical: `/sneakers?page=${page ?? 1}`,
+      canonical,
     },
   };
 }
-
-export default async function Sneakers({ searchParams }: PageProps) {
-  const { search, category, size, page } = await searchParams;
-  const currentPage = Number(page || 1);
-
-  const [categories, data] = await Promise.all([
-    fetchCategories(),
-    fetchSneackers({
-      search: search?.trim() || undefined,
-      category: category?.trim() || undefined,
-      size: size?.trim() || undefined,
-      page: currentPage,
-    }),
-  ]);
 
   return (
     <section>
