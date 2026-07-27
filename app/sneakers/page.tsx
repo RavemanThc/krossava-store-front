@@ -21,8 +21,8 @@ export async function generateMetadata({
   const { search, category, size, page } = await searchParams;
 
   let title = "Каталог кросівок | Krossava";
-  let description = "Каталог брендових кросівок з доставкою по Україні | Adidas, Nike, New Balance. ";
-
+  let description =
+    "Каталог брендових кросівок з доставкою по Україні | Adidas, Nike, New Balance. ";
   if (category) {
     title = `${category} — купити кросівки | Krossava`;
     description = `Категорія ${category}. Великий вибір моделей з доставкою по Україні.`;
@@ -56,6 +56,20 @@ export async function generateMetadata({
     },
   };
 }
+
+export default async function Sneakers({ searchParams }: PageProps) {
+  const { search, category, size, page } = await searchParams;
+  const currentPage = Number(page || 1);
+
+  const [categories, data] = await Promise.all([
+    fetchCategories(),
+    fetchSneackers({
+      search: search?.trim() || undefined,
+      category: category?.trim() || undefined,
+      size: size?.trim() || undefined,
+      page: currentPage,
+    }),
+  ]);
 
   return (
     <section>
