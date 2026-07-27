@@ -34,12 +34,10 @@
   }
   .navigation {
     flex-direction: row;
-
-    margin-left: 72px;
   }
   .list {
     flex-direction: row;
-    margin-left: 120px;
+    margin-left: 220px;
     margin-top: 0;
     font-size: 14px;
   }

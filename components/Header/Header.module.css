@@ -232,7 +232,7 @@
 @media (min-width: 1024px) {
   .desctopMenu {
     display: flex;
-    padding: 0 40px;
+    padding: 0 0;
     justify-content: space-between;
     flex-direction: row;
     align-items: center;

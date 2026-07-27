@@ -7,7 +7,7 @@ const MainHero = () => {
       {" "}
       <div className={css.HerosubWrap}>
         <div className={css.titleWrap}>
-          <h1 className={css.title}>Кросівки на будьякий смак</h1>
+          <h1 className={css.title}>Кросівки на будь який смак</h1>
           <h2 className={css.subtitle}>Купуй стильно і не дорого</h2>
         </div>
 
