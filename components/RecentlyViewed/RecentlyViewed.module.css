@@ -1,0 +1,71 @@
+.historytitle {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+.History {
+  width: 100%;
+}
+.historycard {
+  width: 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  justify-content: space-between;
+  width: 100%;
+  height: 311px;
+  overflow: hidden;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.85);
+
+  cursor: pointer;
+
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+}
+.historycard:hover {
+  transform: scale(1.02);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+.historyimage {
+  width: 100%;
+  border-radius: 8px;
+  object-fit: cover;
+}
+.title {
+  padding: 10px;
+  margin: 0;
+  color: #fff;
+  font-size: 8px;
+  font-weight: bold;
+  font-size: 24px;
+  width: 100%;
+  text-align: center;
+  max-height: 91px;
+  transition: background 0.3s ease;
+}
+.card {
+  position: relative;
+  width: 100%;
+
+  overflow: hidden;
+  border-radius: 4px;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+  background-color: #222;
+}
+.historycard p {
+  color: white;
+  font-size: 18px;
+  background-color: black;
+  width: 100%;
+  text-align: center;
+}
+.HistoryMAin {
+  margin-bottom: 20px;
+}

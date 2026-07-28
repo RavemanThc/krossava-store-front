@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Size, Sneaker } from "@/types/sneaker";
 import css from "./SneakerDetails.module.css";
 import Image from "next/image";
 import toast from "react-hot-toast";
 import { useCart } from "@/src/store/cart";
 import { useRouter } from "next/navigation";
+import { useHistoryStore } from "@/src/store/historyStore";
 type Props = {
   sneaker: Sneaker;
 };
@@ -15,6 +16,10 @@ const SneakerDetailsClient = ({ sneaker }: Props) => {
   const [selectedSize, setSelectedSize] = useState<Size | null>(null);
   const addToCart = useCart((state) => state.addToCart);
   const router = useRouter();
+  const addToHistory = useHistoryStore((state) => state.addToHistory);
+  useEffect(() => {
+    addToHistory(sneaker.id);
+  }, [sneaker.id, addToHistory]);
   const handleBack = () => {
     router.back();
   };

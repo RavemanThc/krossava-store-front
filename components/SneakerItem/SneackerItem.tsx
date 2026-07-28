@@ -13,10 +13,7 @@ interface SneackerCard {
 
 const SneackerItem = ({ sneaker, onSelect }: SneackerCard) => {
   const [imgLoading, setImgLoading] = useState(true);
-  console.log({
-    id: sneaker.id,
-    groupId: sneaker.groupId,
-  });
+
   return (
     <li className={css.listitem}>
       <article className={css.linkWrap}>

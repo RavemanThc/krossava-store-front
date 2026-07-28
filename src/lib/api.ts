@@ -20,9 +20,22 @@ export const fetchSneackers = async (
 };
 export const fetchSneackersById = async (id: string) => {
   const { data } = await api.get(`/sneackers/${id}`);
+  console.log("ID =", id);
+
   return data;
 };
 export const fetchCategories = async (): Promise<CategoriesResponse> => {
   const { data } = await api.get<CategoriesResponse>("/categories");
+  return data;
+};
+export const fetchHistorySneackers = async (ids: string[]) => {
+  const { data } = await api.get("/sneackers/history", {
+    params: {
+      ids: ids.join(","),
+    },
+  });
+
+  console.log("history response:", data);
+
   return data;
 };

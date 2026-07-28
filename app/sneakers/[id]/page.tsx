@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { fetchSneackersById } from "@/src/lib/api";
 import SneakerDetailsClient from "./SneakerDetails";
+import RecentlyViewed from "@/components/RecentlyViewed/RecentlyViewed";
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -135,6 +136,7 @@ export default async function SneakerDetails({ params }: Props) {
           __html: JSON.stringify([product, breadcrumb]),
         }}
       />
+      <RecentlyViewed />
     </>
   );
 }

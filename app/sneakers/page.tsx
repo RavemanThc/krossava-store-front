@@ -5,6 +5,7 @@ import PaginationButton from "@/components/Pagination/Pagination";
 import SizeFilter from "@/components/Filters/SizeFilter";
 
 import type { Metadata } from "next";
+import RecentlyViewed from "@/components/RecentlyViewed/RecentlyViewed";
 
 interface PageProps {
   searchParams: Promise<{
@@ -78,6 +79,7 @@ export default async function Sneakers({ searchParams }: PageProps) {
       <SizeFilter />
       <SneakerClient sneakers={data.products} />
       <PaginationButton currentPage={data.page} totalPages={data.totalPages} />
+      <RecentlyViewed />
     </section>
   );
 }
