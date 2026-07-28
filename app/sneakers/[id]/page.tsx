@@ -66,6 +66,8 @@ export default async function SneakerDetails({ params }: Props) {
     "@context": "https://schema.org",
     "@type": "Product",
 
+    "@id": `https://krossava.com.ua/sneakers/${id}`,
+
     name: sneaker.name,
     image: [image],
     description: sneaker.description,
@@ -86,11 +88,18 @@ export default async function SneakerDetails({ params }: Props) {
       priceCurrency: "UAH",
       availability: "https://schema.org/InStock",
       itemCondition: "https://schema.org/NewCondition",
+
+      priceValidUntil: "2027-12-31",
+
       seller: {
         "@type": "Organization",
         name: "Krossava",
       },
     },
+
+    url: `https://krossava.com.ua/sneakers/${id}`,
+
+    mainEntityOfPage: `https://krossava.com.ua/sneakers/${id}`,
   };
   const breadcrumb = {
     "@context": "https://schema.org",
