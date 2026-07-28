@@ -158,10 +158,7 @@ const store = {
   image: "https://krossava.com.ua/og-image.jpg",
   logo: "https://krossava.com.ua/Logo.webp",
 
-  currenciesAccepted: "UAH",
-
-  paymentAccepted: ["Visa", "MasterCard"],
-
+  acceptedPaymentMethod: ["Visa", "MasterCard"],
   areaServed: "UA",
 
   sameAs: ["https://instagram.com/kro.ssava"],
