@@ -1,7 +1,7 @@
 import { fetchSneackers } from "@/src/lib/api";
 import type { MetadataRoute } from "next";
 
-const SITE_URL = "https://krossava.com.ua/";
+const SITE_URL = "https://krossava.com.ua";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const { products } = await fetchSneackers({
