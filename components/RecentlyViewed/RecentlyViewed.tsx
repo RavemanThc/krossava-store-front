@@ -12,6 +12,7 @@ import { Navigation } from "swiper/modules";
 
 import "swiper/css";
 import "swiper/css/navigation";
+import Link from "next/link";
 
 const RecentlyViewed = () => {
   const history = useHistoryStore((state) => state.history);
@@ -56,7 +57,7 @@ const RecentlyViewed = () => {
         >
           {items.map((item) => (
             <SwiperSlide key={item.id}>
-              <div className={css.historycard}>
+              <Link href={`/sneakers/${item.id}`} className={css.historycard}>
                 <Image
                   className={css.historyimage}
                   src={item.images?.[0] ?? "/placeholder.png"}
@@ -67,7 +68,7 @@ const RecentlyViewed = () => {
 
                 <h4 className={css.title}>{item.name}</h4>
                 <p>{item.price} грн</p>
-              </div>
+              </Link>
             </SwiperSlide>
           ))}
         </Swiper>
