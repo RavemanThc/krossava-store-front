@@ -6,6 +6,7 @@ import Header from "@/components/Header/Header";
 import Footer from "@/components/Footer/Footer";
 import FloatingCart from "@/components/Cart/FloatingCart";
 import { Toaster } from "react-hot-toast";
+import PlerdyTag from "@/src/trackers/Plerdy";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -203,6 +204,7 @@ export default function RootLayout({
     gtag('config', '${process.env.NEXT_PUBLIC_GA_ID}');
   `}
         </Script>
+        <PlerdyTag />
       </body>
     </html>
   );
