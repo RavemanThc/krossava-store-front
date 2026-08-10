@@ -67,7 +67,7 @@ const MainHero = () => {
         <div className={css.titleWrap}>
           <h1 className={css.title}>Кросівки на будь-який смак</h1>
 
-          <p className={css.subtitle}>Купуй стильно і недорого</p>
+          <p className={css.subtitle}>Купуй стильно і вигідно</p>
 
           <button type="button" className={css.herobutton}>
             <Link href="/sneakers">До каталогу</Link>
