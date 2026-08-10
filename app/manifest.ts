@@ -14,12 +14,12 @@ export default function manifest(): MetadataRoute.Manifest {
     lang: "uk",
     icons: [
       {
-        src: "/Logo.png",
+        src: "/manifestimages/Logo-192_192.png",
         sizes: "192x192",
         type: "image/png",
       },
       {
-        src: "/Logo.png",
+        src: "/manifestimages/Logo-512_512.png",
         sizes: "512x512",
         type: "image/png",
       },
