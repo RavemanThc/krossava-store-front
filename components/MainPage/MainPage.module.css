@@ -1,10 +1,11 @@
 .HeroWrap {
-  height: 50vh;
   padding: 0 20px;
   position: relative;
   max-width: 1440px;
   margin: 0 auto;
   overflow: hidden;
+  margin-bottom: 50px;
+  height: 500px;
 }
 .HerosubWrap {
   display: flex;
@@ -33,7 +34,11 @@
 }
 .HeroImage {
   position: absolute;
+  object-fit: contain;
 
+  transform-origin: center center;
+
+  will-change: transform;
   width: 320px;
   height: 220px;
 }
@@ -62,10 +67,101 @@
   border: 1px solid rgba(54, 43, 200, 0.29);
   transform: scale(1.05);
 }
+
+/* Categories */
+/*  */
+.topcategories {
+  display: flex;
+  justify-content: center;
+}
+.topcategorieListswrap {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 30px;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 50px;
+}
+.topcategorieswrapList {
+  width: 170px;
+  height: 200px;
+  overflow: hidden;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+  background-color: rgba(72, 69, 76, 0.2);
+}
+.topcategorieswrapList:hover,
+.topcategorieswrapList:focus {
+  transform: scale(1.02);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+.HeroCategoriesImage {
+  width: 170px;
+  height: 150px;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  margin-bottom: 15px;
+}
+
+@media (max-width: 374px) {
+  .topcategorieswrapList {
+    width: 100px;
+    height: 150px;
+    font-size: 10px;
+  }
+  .HeroCategoriesImage {
+    width: 100px;
+    height: 100px;
+  }
+  .topcategorieListswrap {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 5vw;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 50px;
+  }
+}
+/*  */
+/*  */
 @media (min-width: 767px) {
+  .HeroSneakers {
+    position: absolute;
+
+    right: -350px;
+    bottom: 200px;
+  }
   .HeroImage {
-    width: 320px;
-    height: 220px;
+    width: 480px;
+    height: 330px;
+  }
+  .title {
+    font-size: 28px;
+  }
+  .subtitle {
+    font-size: 24px;
+  }
+  .herobutton {
+    padding: 12px;
+    width: 250px;
+    font-size: 24px;
+  }
+  .topcategorieswrapList {
+    width: 270px;
+    height: 300px;
+  }
+  .HeroCategoriesImage {
+    width: 270px;
+    height: 250px;
+  }
+  .topcategorieListswrap {
+    gap: 100px;
   }
 }
 @media (min-width: 1024px) {
@@ -118,11 +214,16 @@
   .HeroImage {
     width: 700px;
     height: 700px;
-
-    object-fit: contain;
-
-    transform-origin: center center;
-
-    will-change: transform;
+  }
+  .topcategorieswrapList {
+    width: 340px;
+    height: 450px;
+  }
+  .HeroCategoriesImage {
+    width: 340px;
+    height: 400px;
+  }
+  .topcategorieListswrap {
+    gap: 100px;
   }
 }
