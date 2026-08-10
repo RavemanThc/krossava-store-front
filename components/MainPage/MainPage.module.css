@@ -1,11 +1,10 @@
-.mainWrap {
-}
 .HeroWrap {
   height: 50vh;
   padding: 0 20px;
   position: relative;
   max-width: 1440px;
   margin: 0 auto;
+  overflow: hidden;
 }
 .HerosubWrap {
   display: flex;
@@ -34,22 +33,53 @@
 }
 .HeroImage {
   position: absolute;
-  right: -40px;
-  bottom: -20px;
+
   width: 320px;
   height: 220px;
+}
+.herobutton {
+  padding: 8px;
+  width: 150px;
+  font-size: 16px;
+  background: rgba(72, 69, 76, 0.2);
+  border-radius: 16px;
+}
+.HeroSneakers {
+  position: absolute;
+
+  width: 150px;
+  height: 150px;
+
+  right: -500px;
+  bottom: 70px;
+}
+.herobutton:hover,
+.herobutton:focus {
+  transition:
+    transform 0.3s ease,
+    background 0.3s ease;
+  background: rgba(54, 43, 200, 0.2);
+  border: 1px solid rgba(54, 43, 200, 0.29);
+  transform: scale(1.05);
+}
+@media (min-width: 767px) {
+  .HeroImage {
+    width: 320px;
+    height: 220px;
+  }
 }
 @media (min-width: 1024px) {
   .HeroWrap {
     height: 600px;
     padding: 0 20px;
-    position: relative;
   }
   .HerosubWrap {
     height: 70%;
     display: flex;
     flex-direction: row;
     align-items: center;
+    overflow: hidden;
+
     gap: 30px;
   }
   .titleWrap {
@@ -70,11 +100,29 @@
     font-size: 24px;
     color: rgb(65, 59, 59);
   }
-  .HeroImage {
+  .herobutton {
+    padding: 16px;
+    width: 250px;
+    font-size: 28px;
+    border-radius: 16px;
+  }
+  .HeroSneakers {
     position: absolute;
-    right: -40px;
-    bottom: -20px;
-    width: auto;
-    height: auto;
+
+    width: 600px;
+    height: 600px;
+
+    right: -400px;
+    bottom: 0;
+  }
+  .HeroImage {
+    width: 700px;
+    height: 700px;
+
+    object-fit: contain;
+
+    transform-origin: center center;
+
+    will-change: transform;
   }
 }

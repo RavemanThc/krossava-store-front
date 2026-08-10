@@ -25,6 +25,7 @@ export interface Sneaker {
   description: string;
   sizes: Size[];
   barcode: string;
+  updatedAt: number;
 }
 export interface SneackerHttpResponse {
   page: number;
