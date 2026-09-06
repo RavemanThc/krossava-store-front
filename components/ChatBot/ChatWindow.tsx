@@ -1,23 +1,50 @@
 "use client";
 
 import { FormEvent, useEffect, useRef, useState } from "react";
+import ChatMessage from "./ChatMessage";
 import css from "./ChatBot.module.css";
 import { useChat } from "@/hooks/  useChat";
-import ChatMessageItem from "./ChatMessage";
 
 const MAX_MESSAGES = 6;
-const BLOCK_TIME = 30 * 60; // 30 минут
+const BLOCK_TIME = 30 * 60 * 1000;
 
 const ChatWindow = () => {
   const [value, setValue] = useState("");
+
   const [messageCount, setMessageCount] = useState(0);
+  const [blockedUntil, setBlockedUntil] = useState(0);
   const [timeLeft, setTimeLeft] = useState(0);
 
   const { messages, clearChat, sendMessage, isLoading } = useChat();
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  const isBlocked = messageCount >= MAX_MESSAGES;
+  const isBlocked = timeLeft > 0;
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      const savedCount = Number(localStorage.getItem("chatMessageCount"));
+
+      const savedBlockedUntil = Number(
+        localStorage.getItem("chatBlockedUntil"),
+      );
+
+      setMessageCount(savedCount || 0);
+
+      if (savedBlockedUntil > Date.now()) {
+        setBlockedUntil(savedBlockedUntil);
+
+        const remaining = Math.ceil((savedBlockedUntil - Date.now()) / 1000);
+
+        setTimeLeft(remaining);
+      } else {
+        localStorage.removeItem("chatMessageCount");
+        localStorage.removeItem("chatBlockedUntil");
+      }
+    }, 0);
+
+    return () => clearTimeout(timeout);
+  }, []);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({
@@ -27,21 +54,27 @@ const ChatWindow = () => {
   }, [messages, isLoading]);
 
   useEffect(() => {
-    if (!isBlocked) return;
+    if (!blockedUntil) return;
 
     const interval = setInterval(() => {
-      setTimeLeft((prev) => {
-        if (prev <= 1) {
-          setMessageCount(0);
-          return 0;
-        }
+      const remaining = Math.ceil((blockedUntil - Date.now()) / 1000);
 
-        return prev - 1;
-      });
+      if (remaining <= 0) {
+        localStorage.removeItem("chatMessageCount");
+        localStorage.removeItem("chatBlockedUntil");
+
+        setMessageCount(0);
+        setBlockedUntil(0);
+        setTimeLeft(0);
+
+        return;
+      }
+
+      setTimeLeft(remaining);
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [isBlocked]);
+  }, [blockedUntil]);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -52,17 +85,26 @@ const ChatWindow = () => {
 
     setValue("");
 
-    await sendMessage(text);
+    try {
+      await sendMessage(text);
 
-    setMessageCount((prev) => {
-      const newCount = prev + 1;
+      const newCount = messageCount + 1;
+
+      setMessageCount(newCount);
+
+      localStorage.setItem("chatMessageCount", String(newCount));
 
       if (newCount >= MAX_MESSAGES) {
-        setTimeLeft(BLOCK_TIME);
-      }
+        const until = Date.now() + BLOCK_TIME;
 
-      return newCount;
-    });
+        setBlockedUntil(until);
+        setTimeLeft(BLOCK_TIME / 1000);
+
+        localStorage.setItem("chatBlockedUntil", String(until));
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const formatTime = (seconds: number) => {
@@ -76,7 +118,7 @@ const ChatWindow = () => {
     <div className={css.chatBotWindow}>
       <div className={css.chatBotMessages}>
         {messages.map((message) => (
-          <ChatMessageItem key={message.id} message={message} />
+          <ChatMessage key={message.id} message={message} />
         ))}
 
         {isLoading && <p>Шукаю...</p>}
@@ -96,11 +138,7 @@ const ChatWindow = () => {
         />
 
         <div className={css.buttonwrap}>
-          <button
-            type="button"
-            onClick={clearChat}
-            disabled={messages.length === 0}
-          >
+          <button type="button" onClick={clearChat}>
             Очистити чат
           </button>
 
