@@ -7,6 +7,7 @@ import Footer from "@/components/Footer/Footer";
 import FloatingCart from "@/components/Cart/FloatingCart";
 import { Toaster } from "react-hot-toast";
 import PlerdyTag from "@/src/trackers/Plerdy";
+import ChatBot from "@/components/ChatBot/ChatBot";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -181,6 +182,7 @@ export default function RootLayout({
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <Header />
         <main>{children}</main>
+        <ChatBot />
         <Footer />
         <FloatingCart />
         <Toaster position="top-center" />

@@ -1,8 +1,10 @@
+import { ChatResponse } from "@/types/  chat";
 import {
   CategoriesResponse,
   SneackerHttpResponse,
   SneackerQueryParams,
 } from "@/types/sneaker";
+
 import axios from "axios";
 
 export const api = axios.create({
@@ -36,6 +38,17 @@ export const fetchHistorySneackers = async (ids: string[]) => {
   });
 
   console.log("history response:", data);
+
+  return data;
+};
+export const sendChatMessage = async (
+  message: string,
+  sessionId: string,
+): Promise<ChatResponse> => {
+  const { data } = await api.post<ChatResponse>("/chat", {
+    message,
+    sessionId,
+  });
 
   return data;
 };
