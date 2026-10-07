@@ -1,4 +1,6 @@
 "use client";
+import { productPath } from "@/src/lib/product-route";
+
 import { useState } from "react";
 
 import css from "./SneackerCard.module.css";
@@ -17,7 +19,7 @@ const SneackerItem = ({ sneaker, onSelect }: SneackerCard) => {
   return (
     <li className={css.listitem}>
       <article className={css.linkWrap}>
-        <Link href={`/sneakers/${sneaker.id}`} className={css.linkWrap}>
+        <Link href={productPath(sneaker)} className={css.linkWrap}>
           <div className={css.card}>
             {/* 1. Левый блок: берем первые 5 элементов, рендерим их слева */}
             <ul className={`${css.wrapsize} ${css.leftSide}`}>
@@ -27,6 +29,7 @@ const SneackerItem = ({ sneaker, onSelect }: SneackerCard) => {
                     type="button"
                     className={css.sizebutton}
                     onClick={(e) => {
+                      e.preventDefault();
                       e.stopPropagation();
                       onSelect(sneaker, sizeObj.size);
                     }}
@@ -45,7 +48,8 @@ const SneackerItem = ({ sneaker, onSelect }: SneackerCard) => {
                       type="button"
                       className={css.sizebutton}
                       onClick={(e) => {
-                        e.stopPropagation();
+                        e.preventDefault();
+                      e.stopPropagation();
                         onSelect(sneaker, sizeObj.size);
                       }}
                     >
@@ -83,7 +87,8 @@ const SneackerItem = ({ sneaker, onSelect }: SneackerCard) => {
                   type="button"
                   className={css.sizebutton}
                   onClick={(e) => {
-                    e.stopPropagation();
+                    e.preventDefault();
+                      e.stopPropagation();
                     onSelect(sneaker, sizeObj.size);
                   }}
                 >

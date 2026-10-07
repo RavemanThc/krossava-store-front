@@ -2,7 +2,7 @@
 import { IoMdArrowDropdown } from "react-icons/io";
 
 import { useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import css from "./Filters.module.css";
 
 const sizes = [
@@ -23,6 +23,7 @@ const sizes = [
 
 export default function SizeFilter() {
   const router = useRouter();
+  const pathname = usePathname();
   const searchParams = useSearchParams();
 
   const [open, setOpen] = useState(false);
@@ -40,7 +41,7 @@ export default function SizeFilter() {
 
     params.delete("page");
 
-    router.push(`/sneakers?${params.toString()}`);
+    router.push(params.size ? `${pathname}?${params.toString()}` : pathname);
 
     setOpen(false);
   };

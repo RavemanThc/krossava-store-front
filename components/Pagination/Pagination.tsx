@@ -1,38 +1,33 @@
 "use client";
 
-import ReactPaginate from "react-paginate";
+import Link from "next/link";
 import { PiSneakerMoveLight } from "react-icons/pi";
-import { useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
+import { catalogPageHref } from "@/src/lib/catalog-route";
 import css from "./Pagination.module.css";
 
-interface Props {
-  totalPages: number;
-  currentPage: number;
-}
+type Props = { totalPages: number; currentPage: number };
 
 export default function PaginationButton({ totalPages, currentPage }: Props) {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-
-  if (totalPages <= 1) return <div className={css.paginationWrapper}></div>;
-
-  const handlePageChange = (event: { selected: number }) => {
-    const params = new URLSearchParams(searchParams.toString());
-    params.set("page", String(event.selected + 1));
-    router.push(`/sneakers?${params.toString()}`);
-  };
-
+  const pathname = usePathname();
+  const query = useSearchParams().toString();
+  if (totalPages <= 1) return null;
+  const href = (page: number) => catalogPageHref(pathname, query, page);
+  const pages = [...new Set([1, totalPages, ...Array.from({ length: 5 }, (_, i) => currentPage + i - 2)])]
+    .filter(page => page >= 1 && page <= totalPages).sort((a, b) => a - b);
   return (
-    <ReactPaginate
-      pageCount={totalPages}
-      pageRangeDisplayed={5}
-      marginPagesDisplayed={1}
-      onPageChange={handlePageChange}
-      forcePage={currentPage - 1}
-      containerClassName={css.pagination}
-      activeClassName={css.active}
-      nextLabel={<PiSneakerMoveLight />}
-      previousLabel={<PiSneakerMoveLight className={css.flipped} />}
-    />
+    <nav aria-label="Сторінки каталогу">
+      <ul className={css.pagination}>
+        {currentPage > 1 && <li><Link prefetch={false} href={href(currentPage - 1)} rel="prev" aria-label="Попередня сторінка"><PiSneakerMoveLight className={css.flipped} /></Link></li>}
+        {pages.map((page, index) => (
+          <li key={page} className={page === currentPage ? css.active : undefined}>
+            <Link prefetch={false} href={href(page)} aria-current={page === currentPage ? "page" : undefined} aria-label={`Сторінка ${page}`}>
+              {index > 0 && page - pages[index - 1] > 1 ? `… ${page}` : page}
+            </Link>
+          </li>
+        ))}
+        {currentPage < totalPages && <li><Link prefetch={false} href={href(currentPage + 1)} rel="next" aria-label="Наступна сторінка"><PiSneakerMoveLight /></Link></li>}
+      </ul>
+    </nav>
   );
 }

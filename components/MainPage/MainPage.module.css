@@ -196,10 +196,16 @@
     font-size: 24px;
     color: rgb(65, 59, 59);
   }
+  .buttonWrapper {
+    width: 270px;
+  }
   .herobutton {
     padding: 16px;
-    width: 250px;
+    width: 230px;
+    margin-left: 20px;
+    font-weight: 600;
     font-size: 28px;
+    border: 1px solid transparent;
     border-radius: 16px;
   }
   .HeroSneakers {

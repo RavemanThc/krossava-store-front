@@ -1,4 +1,6 @@
 "use client";
+import { productPath } from "@/src/lib/product-route";
+
 
 import { useEffect, useState } from "react";
 import { useHistoryStore } from "@/src/store/historyStore";
@@ -22,7 +24,11 @@ const RecentlyViewed = () => {
   useEffect(() => {
     if (!history.length) return;
 
-    fetchHistorySneackers(history).then(setItems);
+    let active = true;
+    fetchHistorySneackers(history.filter(id => typeof id === "string" && /^[a-f0-9]{24}$/i.test(id)))
+      .then(data => { if (active) setItems(data); })
+      .catch(() => { if (active) setItems([]); });
+    return () => { active = false; };
   }, [history]);
 
   if (!history.length || !items.length) {
@@ -57,7 +63,7 @@ const RecentlyViewed = () => {
         >
           {items.map((item) => (
             <SwiperSlide key={item.id}>
-              <Link href={`/sneakers/${item.id}`} className={css.historycard}>
+              <Link href={productPath(item)} className={css.historycard}>
                 <Image
                   className={css.historyimage}
                   src={item.images?.[0] ?? "/placeholder.png"}

@@ -1,3 +1,4 @@
+import { productPath } from "@/src/lib/product-route";
 import { ChatProduct } from "@/types/  chat";
 import Image from "next/image";
 import Link from "next/link";
@@ -8,7 +9,7 @@ interface Props {
 
 const ChatProductCard = ({ product }: Props) => {
   return (
-    <Link href={product.url} className={css.productLink}>
+    <Link href={productPath(product)} className={css.productLink}>
       <article className={css.productLink}>
         {product.image && (
           <Image

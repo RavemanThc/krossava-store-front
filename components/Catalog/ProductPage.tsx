@@ -1,22 +1,19 @@
+import sanitizeHtml from "sanitize-html";
 import type { Metadata } from "next";
-import { fetchSneackersById } from "@/src/lib/api";
+import { Sneaker } from "@/types/sneaker";
+import { productPath } from "@/src/lib/product-route";
 import SneakerDetailsClient from "./SneakerDetails";
 import RecentlyViewed from "@/components/RecentlyViewed/RecentlyViewed";
 
-type Props = {
-  params: Promise<{ id: string }>;
-};
+type Props = { sneaker: Sneaker };
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { id } = await params;
-  const sneaker = await fetchSneackersById(id);
-
+export async function productMetadata({ sneaker }: Props): Promise<Metadata> {
   const image = sneaker.image.startsWith("http")
     ? sneaker.image
     : `https://krossava.com.ua${sneaker.image}`;
 
   return {
-    title: `${sneaker.name} — купити в Україні | Krossava`,
+    title: `${sneaker.name} — купити в Україні`,
     description: `${sneaker.name}. Ціна ${sneaker.price} грн. Брендові кросівки з доставкою по Україні.`,
 
     keywords: [
@@ -28,12 +25,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     ],
 
     alternates: {
-      canonical: `/sneakers/${id}`,
+      canonical: productPath(sneaker),
     },
 
     openGraph: {
       type: "website",
-      url: `https://krossava.com.ua/sneakers/${id}`,
+      url: `https://krossava.com.ua${productPath(sneaker)}`,
       title: `${sneaker.name} | Krossava`,
       description: `${sneaker.name}. Ціна ${sneaker.price} грн.`,
       images: [
@@ -55,9 +52,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default async function SneakerDetails({ params }: Props) {
-  const { id } = await params;
-  const sneaker = await fetchSneackersById(id);
+export default function ProductPage({ sneaker }: Props) {
 
   const image = sneaker.image.startsWith("http")
     ? sneaker.image
@@ -67,7 +62,7 @@ export default async function SneakerDetails({ params }: Props) {
     "@context": "https://schema.org",
     "@type": "Product",
 
-    "@id": `https://krossava.com.ua/sneakers/${id}`,
+    "@id": `https://krossava.com.ua${productPath(sneaker)}`,
 
     name: sneaker.name,
     image: [image],
@@ -84,10 +79,11 @@ export default async function SneakerDetails({ params }: Props) {
 
     offers: {
       "@type": "Offer",
-      url: `https://krossava.com.ua/sneakers/${id}`,
+      url: `https://krossava.com.ua${productPath(sneaker)}`,
       price: sneaker.price,
       priceCurrency: "UAH",
-      availability: "https://schema.org/InStock",
+      availability: sneaker.sizes.some(size => size.quantity > 0)
+        ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
       itemCondition: "https://schema.org/NewCondition",
 
       priceValidUntil: "2027-12-31",
@@ -98,9 +94,9 @@ export default async function SneakerDetails({ params }: Props) {
       },
     },
 
-    url: `https://krossava.com.ua/sneakers/${id}`,
+    url: `https://krossava.com.ua${productPath(sneaker)}`,
 
-    mainEntityOfPage: `https://krossava.com.ua/sneakers/${id}`,
+    mainEntityOfPage: `https://krossava.com.ua${productPath(sneaker)}`,
   };
   const breadcrumb = {
     "@context": "https://schema.org",
@@ -122,18 +118,18 @@ export default async function SneakerDetails({ params }: Props) {
         "@type": "ListItem",
         position: 3,
         name: sneaker.name,
-        item: `https://krossava.com.ua/sneakers/${id}`,
+        item: `https://krossava.com.ua${productPath(sneaker)}`,
       },
     ],
   };
   return (
     <>
-      <SneakerDetailsClient sneaker={sneaker} />
+      <SneakerDetailsClient key={sneaker.id} sneaker={{ ...sneaker, description: sanitizeHtml(sneaker.description || "") }} />
 
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify([product, breadcrumb]),
+          __html: JSON.stringify([product, breadcrumb]).replace(/</g, "\\u003c"),
         }}
       />
       <RecentlyViewed />

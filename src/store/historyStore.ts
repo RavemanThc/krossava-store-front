@@ -15,6 +15,7 @@ export const useHistoryStore = create<HistoryStore>()(
       history: [],
 
       addToHistory: (id) => {
+        if (!id) return;
         const filtered = get().history.filter((item) => item !== id);
 
         filtered.unshift(id);

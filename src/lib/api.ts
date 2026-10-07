@@ -1,5 +1,6 @@
 import { ChatResponse } from "@/types/  chat";
 import {
+  Sneaker,
   CategoriesResponse,
   SneackerHttpResponse,
   SneackerQueryParams,
@@ -21,17 +22,18 @@ export const fetchSneackers = async (
   return data;
 };
 export const fetchSneackersById = async (id: string) => {
-  const { data } = await api.get(`/sneackers/${id}`);
-  console.log("ID =", id);
-
-  return data;
+  const { data } = await api.get<Sneaker & { _id?: string }>(`/sneackers/${id}`);
+  if (!data) return data;
+  return { ...data, id: data.id || data._id || id, name: data.name || data.title,
+    title: data.title || data.name, image: data.image || data.images?.[0] || "",
+    images: data.images || (data.image ? [data.image] : []) };
 };
 export const fetchCategories = async (): Promise<CategoriesResponse> => {
   const { data } = await api.get<CategoriesResponse>("/categories");
   return data;
 };
 export const fetchHistorySneackers = async (ids: string[]) => {
-  const { data } = await api.get("/sneackers/history", {
+  const { data } = await api.get<Sneaker[]>("/sneackers/history", {
     params: {
       ids: ids.join(","),
     },

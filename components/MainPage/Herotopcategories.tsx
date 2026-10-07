@@ -8,7 +8,7 @@ const Herotopcategories = () => {
         <ul className={css.topcategorieListswrap}>
           <li>
             <Link
-              href={`/sneakers?search=Adidas`}
+              href={`/sneakers/adidas`}
               className={css.topcategorieswrapList}
             >
               <Image
@@ -23,7 +23,7 @@ const Herotopcategories = () => {
           </li>
           <li>
             <Link
-              href={`/sneakers?search=Nike`}
+              href={`/sneakers/nike`}
               className={css.topcategorieswrapList}
             >
               <Image
@@ -38,7 +38,7 @@ const Herotopcategories = () => {
           </li>
           <li>
             <Link
-              href={`/sneakers?search=Asics`}
+              href={`/sneakers/asics`}
               className={css.topcategorieswrapList}
             >
               <Image
@@ -53,7 +53,7 @@ const Herotopcategories = () => {
           </li>
           <li>
             <Link
-              href={`/sneakers?search=New+Balance`}
+              href={`/sneakers/new-balance`}
               className={css.topcategorieswrapList}
             >
               <Image

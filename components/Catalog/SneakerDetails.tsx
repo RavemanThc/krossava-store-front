@@ -29,13 +29,14 @@ const SneakerDetailsClient = ({ sneaker }: Props) => {
       return;
     }
 
-    addToCart({
+    const added = addToCart({
       sneaker,
       size: selectedSize.size,
       quantity: 1,
     });
 
-    toast.success("додано в кошик");
+    if (added) toast.success("додано в кошик");
+    else toast.error("Цей розмір відсутній або вся доступна кількість уже в кошику");
   };
   return (
     <>
@@ -66,6 +67,7 @@ const SneakerDetailsClient = ({ sneaker }: Props) => {
             {sneaker.sizes.map((sizeObj, index) => (
               <li key={index} className={css.size}>
                 <button
+                  disabled={sizeObj.quantity <= 0}
                   type="button"
                   className={`${css.sizebutton} ${
                     selectedSize?.size === sizeObj.size ? css.active : ""

@@ -1,17 +1,17 @@
 "use client";
 
-import { useRouter, useSearchParams } from "next/navigation";
+import Link from "next/link";
+import { categoryPath } from "@/src/lib/catalog-route";
 import type { Category } from "@/types/sneaker";
 import css from "./Filters.module.css";
 import { useEffect, useRef } from "react";
 
 interface Props {
   categories: Category[];
+  current?: string;
 }
 
-export default function CategorySelect({ categories }: Props) {
-  const router = useRouter();
-  const searchParams = useSearchParams();
+export default function CategorySelect({ categories, current = "" }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
   const scrollInterval = useRef<NodeJS.Timeout | null>(null);
 
@@ -44,22 +44,6 @@ export default function CategorySelect({ categories }: Props) {
     startAutoScroll();
     return () => stopAutoScroll();
   }, []);
-  const current = searchParams.get("search") || "";
-
-  const handleChange = (value: string) => {
-    const params = new URLSearchParams(searchParams.toString());
-
-    if (!value) {
-      params.delete("category");
-      params.delete("search");
-    } else {
-      params.set("search", value);
-    }
-
-    params.delete("page");
-
-    router.push(`/sneakers?${params.toString()}`);
-  };
 
   return (
     <div className={css.filterallwrap}>
@@ -69,25 +53,27 @@ export default function CategorySelect({ categories }: Props) {
         onMouseEnter={stopAutoScroll}
         onTouchStart={stopAutoScroll}
       >
-        <button
-          onClick={() => handleChange("")}
+        <Link
+          href="/sneakers"
+          prefetch={false}
           className={`${css.filterButton} ${current === "" ? css.active : ""}`}
         >
           Всі категорії
-        </button>
+        </Link>
         {categories.map((cat) => (
-          <button
+          <Link
             key={cat}
-            onClick={() => handleChange(cat)}
+            href={categoryPath(cat)}
+            prefetch={false}
             className={`${css.categoryButton} ${
               current === cat ? css.active : ""
             }`}
           >
             {cat}
-          </button>
+          </Link>
         ))}
       </div>
-      <h1 className={css.title}>{current || "Всі кросівки"}</h1>
+
     </div>
   );
 }

@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import css from "./Cart.module.css";
-import { useCart } from "@/src/store/cart";
+import { getStock, useCart } from "@/src/store/cart";
 import {
   MdOutlineRemoveCircleOutline,
   MdOutlineAddCircleOutline,
@@ -44,6 +44,7 @@ export default function CartClient() {
               </button>
               <span className={css.bolditem}> {item.quantity}</span>
               <button
+                disabled={item.quantity >= getStock(item.sneaker, item.size)}
                 className={css.addquantity}
                 onClick={() => addQuantity(item.sneaker.id, item.size)}
               >

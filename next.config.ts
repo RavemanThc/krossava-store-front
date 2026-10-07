@@ -21,6 +21,10 @@ const securityHeaders = [
 
 const nextConfig: NextConfig = {
   reactCompiler: true,
+  // Isolate local development from copied caches and production builds.
+  distDir: process.env.NODE_ENV === "development" ? ".next-turbo" : ".next",
+  turbopack: { root: __dirname },
+  experimental: { turbopackFileSystemCacheForDev: false },
 
   images: {
     remotePatterns: [
