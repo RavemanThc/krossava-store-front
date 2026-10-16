@@ -13,49 +13,21 @@ interface Props {
 
 export default function CategorySelect({ categories, current = "" }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const scrollInterval = useRef<NodeJS.Timeout | null>(null);
-
-  const startAutoScroll = () => {
-    if (scrollInterval.current) return;
-
-    scrollInterval.current = setInterval(() => {
-      if (containerRef.current) {
-        // Прокручиваем на 1 пиксель каждые 30мс
-        containerRef.current.scrollLeft += 1;
-
-        if (
-          containerRef.current.scrollLeft >=
-          containerRef.current.scrollWidth - containerRef.current.clientWidth
-        ) {
-          containerRef.current.scrollLeft = 0;
-        }
-      }
-    }, 30);
-  };
-
-  const stopAutoScroll = () => {
-    if (scrollInterval.current) {
-      clearInterval(scrollInterval.current);
-      scrollInterval.current = null;
-    }
-  };
-
   useEffect(() => {
-    startAutoScroll();
-    return () => stopAutoScroll();
-  }, []);
+    containerRef.current?.querySelector('[aria-current="page"]')?.scrollIntoView({
+      block: "nearest", inline: "nearest",
+    });
+  }, [current]);
 
   return (
     <div className={css.filterallwrap}>
       <div
         className={css.filterWrap}
         ref={containerRef}
-        onMouseEnter={stopAutoScroll}
-        onTouchStart={stopAutoScroll}
       >
         <Link
           href="/sneakers"
-          prefetch={false}
+          aria-current={current === "" ? "page" : undefined}
           className={`${css.filterButton} ${current === "" ? css.active : ""}`}
         >
           Всі категорії
@@ -64,7 +36,7 @@ export default function CategorySelect({ categories, current = "" }: Props) {
           <Link
             key={cat}
             href={categoryPath(cat)}
-            prefetch={false}
+            aria-current={current === cat ? "page" : undefined}
             className={`${css.categoryButton} ${
               current === cat ? css.active : ""
             }`}

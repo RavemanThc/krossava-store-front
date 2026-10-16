@@ -55,3 +55,13 @@ test('sitemap includes category pages and every cursor page of products',async()
  }
  assert.deepEqual(seen,[{},{after:'1'}]);
 });
+
+test('encoded and decoded Cyrillic segments resolve to the same category', () => {
+ const {decodeRouteSegments}=loaded.exports;
+ for(const name of ['❄️Зима❄️', '🔥❄️ SALE-ЗИМА ❄️🔥', 'Великі розміри 47-50']) {
+  const encoded=categoryPath(name).split('/').pop();
+  assert.equal(decodeRouteSegments([encoded])[0],categorySlug(name));
+  assert.equal(decodeRouteSegments([categorySlug(name)])[0],categorySlug(name));
+ }
+ assert.deepEqual(decodeRouteSegments(['bad%']),['bad%']);
+});

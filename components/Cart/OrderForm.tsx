@@ -8,7 +8,6 @@ import toast from "react-hot-toast";
 import { useCart } from "@/src/store/cart";
 import css from "./OrderForm.module.css";
 import axios from "axios";
-import { TypeAnimation } from "react-type-animation";
 
 interface OrderValues {
   firstname: string;
@@ -17,17 +16,17 @@ interface OrderValues {
 }
 
 const OrderSchema = Yup.object({
-  firstname: Yup.string()
+  firstname: Yup.string().trim()
     .min(2, "Мінімум 2 символи")
     .max(30, "Максимум 30 символів")
     .required("Поле обов'язкове"),
 
-  lastname: Yup.string()
+  lastname: Yup.string().trim()
     .min(2, "Мінімум 2 символи")
     .max(30, "Максимум 30 символів")
     .required("Поле обов'язкове"),
 
-  socialMedia: Yup.string()
+  socialMedia: Yup.string().trim()
     .min(2, "Мінімум 2 символи")
     .max(50, "Максимум 50 символів")
     .required("Поле обов'язкове"),
@@ -57,7 +56,7 @@ export default function OrderForm() {
       onSubmit={async (values, actions) => {
         try {
           await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/orders`, {
-            customer: values,
+            customer: OrderSchema.cast(values),
             items: orderItems,
           });
 
@@ -112,7 +111,7 @@ export default function OrderForm() {
               className={css.error}
             />
 
-            <label className={css.inputname} htmlFor={`${id}-social`}>
+            <label className={css.inputname} htmlFor={`${id}-socialMedia`}>
               Контактні дані: Instagram/Telegram/Viber
             </label>
 

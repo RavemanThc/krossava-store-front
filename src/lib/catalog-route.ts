@@ -36,3 +36,12 @@ export function catalogDescription(category?: string): string {
     ? `Взуття в категорії «${category}». Перегляньте моделі та ціни, оберіть розмір. Наявність і доступні розміри вказані у картці кожного товару.`
     : "";
 }
+
+// Next may expose encoded segments during one rendering phase and decoded ones
+// during another. Normalize once before lookup and canonical URL comparison.
+export function decodeRouteSegments(slug: string[]): string[] {
+  return slug.map(segment => {
+    try { return decodeURIComponent(segment); }
+    catch { return segment; }
+  });
+}

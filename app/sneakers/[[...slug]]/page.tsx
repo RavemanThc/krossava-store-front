@@ -4,10 +4,11 @@ import { isAxiosError } from "axios";
 import type { Metadata } from "next";
 import CatalogPage, { catalogMetadata } from "@/components/Catalog/CatalogPage";
 import ProductPage, { productMetadata } from "@/components/Catalog/ProductPage";
-import { fetchCategories, fetchSneackersById } from "@/src/lib/api";
+import { fetchSneackersById } from "@/src/lib/api";
 import { productIdFromSlug, productPath } from "@/src/lib/product-route";
 
-import { categoryPath, categorySlug } from "@/src/lib/catalog-route";
+import { getCategories } from "@/src/lib/catalog-server";
+import { categoryPath, categorySlug, decodeRouteSegments } from "@/src/lib/catalog-route";
 
 type Props = {
   params: Promise<{ slug?: string[] }>;
@@ -35,7 +36,6 @@ async function resolveProduct(slug: string[]) {
   return product;
 }
 
-const getCategories = cache(fetchCategories);
 
 async function resolveCategory(slug: string[], query: Awaited<Props["searchParams"]>) {
   if (slug.length > 1) notFound();
@@ -57,14 +57,14 @@ async function resolveCategory(slug: string[], query: Awaited<Props["searchParam
 }
 
 export async function generateMetadata({ params, searchParams }: Props): Promise<Metadata> {
-  const { slug = [] } = await params;
+  const slug = decodeRouteSegments((await params).slug || []);
   if (productIdFromSlug(slug)) return productMetadata({ sneaker: await resolveProduct(slug) });
   const category = await resolveCategory(slug, await searchParams);
   return catalogMetadata({ searchParams, category });
 }
 
 export default async function SneakersRoute({ params, searchParams }: Props) {
-  const { slug = [] } = await params;
+  const slug = decodeRouteSegments((await params).slug || []);
   if (productIdFromSlug(slug)) return <ProductPage sneaker={await resolveProduct(slug)} />;
   const category = await resolveCategory(slug, await searchParams);
   return <CatalogPage searchParams={searchParams} category={category} />;

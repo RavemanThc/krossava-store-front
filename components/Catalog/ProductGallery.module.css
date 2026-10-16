@@ -1,0 +1,27 @@
+.gallery {
+  width: 100%;
+  min-width: 0;
+  max-width: 640px;
+  margin-top: 50px;
+  --swiper-navigation-color: #111;
+  --swiper-pagination-color: #111;
+  --swiper-navigation-size: 26px;
+}
+.frame {
+  position: relative;
+  aspect-ratio: 1;
+  width: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+}
+.frame:hover,
+.frame:focus {
+}
+.image {
+  object-fit: contain;
+}
+@media (min-width: 1024px) {
+  .gallery {
+    width: 45%;
+  }
+}

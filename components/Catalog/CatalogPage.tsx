@@ -1,6 +1,7 @@
 import SneakerClient from "@/components/SneakersClient/SneakerClient";
 import CategorySelect from "@/components/Filters/CategorySelect";
-import { fetchCategories, fetchSneackers } from "@/src/lib/api";
+import { fetchSneackers } from "@/src/lib/api";
+import { getCategories } from "@/src/lib/catalog-server";
 import PaginationButton from "@/components/Pagination/Pagination";
 import SizeFilter from "@/components/Filters/SizeFilter";
 import type { Metadata } from "next";
@@ -53,7 +54,7 @@ export default async function CatalogPage({
   const { search, size, page } = await searchParams;
   const currentPage = catalogPageNumber(page);
   const [categories, data] = await Promise.all([
-    fetchCategories(),
+    getCategories(),
     fetchSneackers({
       search: search?.trim() || undefined,
       category,

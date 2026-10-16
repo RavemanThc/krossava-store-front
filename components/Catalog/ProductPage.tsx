@@ -65,7 +65,7 @@ export default function ProductPage({ sneaker }: Props) {
     "@id": `https://krossava.com.ua${productPath(sneaker)}`,
 
     name: sneaker.name,
-    image: [image],
+    image: [...new Set([image, ...(sneaker.images || [])])],
     description: sneaker.description,
 
     sku: sneaker.barcode,

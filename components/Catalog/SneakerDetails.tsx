@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { Size, Sneaker } from "@/types/sneaker";
 import css from "./SneakerDetails.module.css";
-import Image from "next/image";
+import ProductGallery from "./ProductGallery";
 import toast from "react-hot-toast";
 import { useCart } from "@/src/store/cart";
 import { useRouter } from "next/navigation";
@@ -44,13 +44,9 @@ const SneakerDetailsClient = ({ sneaker }: Props) => {
         <button type="button" onClick={handleBack} className={css.backbutton}>
           Назад
         </button>
-        <Image
-          className={css.photo}
-          src={sneaker.image}
-          alt={sneaker.name}
-          width={600}
-          height={600}
-          priority
+        <ProductGallery
+          images={[sneaker.image, ...(sneaker.images || [])]}
+          name={sneaker.name}
         />
 
         <div className={css.content}>
