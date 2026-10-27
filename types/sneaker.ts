@@ -6,6 +6,8 @@ export interface SneackerQueryParams {
   page?: number;
   perPage?: number;
   category?: string;
+  brand?: string;
+  model?: string;
   search?: string;
   minPrice?: number;
   maxPrice?: number;
@@ -27,7 +29,16 @@ export interface Sneaker {
   barcode: string;
   updatedAt?: string;
 }
+export interface FilterOption { value: string; count: number; }
+export interface CatalogFiltersData {
+  categoryBrand: string;
+  brand: string;
+  brands: FilterOption[];
+  models: FilterOption[];
+  sizes: FilterOption[];
+}
 export interface SneackerHttpResponse {
+  filters?: CatalogFiltersData;
   page: number;
   perPage: number;
   totalItems: number;

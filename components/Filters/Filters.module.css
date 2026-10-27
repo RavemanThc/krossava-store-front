@@ -137,3 +137,181 @@
     font-size: 36px;
   }
 }
+
+.catalogFilters {
+  display: flex;
+  flex-wrap: nowrap;
+  width: 100%;
+  align-items: end;
+  gap: 2px;
+  margin: 20px 10px;
+}
+.selectLabel {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 80px;
+}
+
+.selectLabel select {
+  width: 50%;
+  min-height: 44px;
+  padding: 10px 12px;
+  border: 1px solid #bcb9c8;
+  border-radius: 10px;
+  background: #fff;
+  color: #18151f;
+  font: inherit;
+}
+.selectLabel select:focus-visible,
+.clearFilters:focus-visible {
+  outline-offset: 3px;
+}
+.selectLabel select:disabled {
+  background: #f2f1f5;
+  color: #777;
+}
+
+.clearFilters {
+  min-height: 44px;
+  padding: 10px 14px;
+  border: 1px solid #bcb9c8;
+  border-radius: 10px;
+  background: transparent;
+  cursor: pointer;
+}
+.clearFilters:focus,
+.clearFilters:hover {
+  background: rgba(71, 65, 142, 0.25);
+}
+.filterStatus {
+  font-size: 14px;
+  flex-basis: 100%;
+  min-height: 20px;
+}
+@media (max-width: 480px) {
+  .selectLabel {
+    max-width: none;
+    flex-basis: 100%;
+  }
+}
+
+/* Custom popup: keep the existing .selectLabel layout and control width. */
+.filterDropdown {
+  position: relative;
+  width: 50%;
+}
+.filterTrigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 12px;
+  border: 1px solid #bcb9c8;
+  border-radius: 10px;
+  background: #fff;
+  color: #18151f;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.filterTrigger .filterValue {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font: inherit;
+}
+.filterTrigger:disabled {
+  background: #f2f1f5;
+  color: #777;
+  cursor: default;
+}
+.filterTrigger:focus-visible,
+.filterOption:focus-visible {
+  outline: 2px solid #5143b5;
+  outline-offset: 2px;
+}
+.filterChevron {
+  flex-shrink: 0;
+  transition: transform 180ms ease;
+}
+.filterChevron[data-open="true"] {
+  transform: rotate(180deg);
+}
+.filterOptions {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: 50;
+  width: max-content;
+  min-width: 100%;
+  max-width: min(280px, 65vw);
+  max-height: min(280px, 40dvh);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 5px;
+  border: 1px solid #d8d5e0;
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 0 8px 24px rgb(0 0 0 / 14%);
+  transform-origin: top;
+  animation: filterSlideDown 180ms ease-out;
+}
+.filterOption {
+  display: block;
+  width: 100%;
+  min-height: 40px;
+  padding: 9px 12px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: #18151f;
+  font: inherit;
+  text-align: left;
+  overflow-wrap: anywhere;
+  cursor: pointer;
+}
+.filterOption:hover,
+.filterOption:focus {
+  background: #f2effa;
+}
+.filterOption[aria-selected="true"] {
+  background: #e8e3f6;
+  font-weight: 600;
+}
+@keyframes filterSlideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scaleY(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scaleY(1);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .filterOptions {
+    animation: none;
+  }
+  .filterChevron {
+    transition: none;
+  }
+}
+@media (min-width: 1024px) {
+  .selectLabel {
+    max-width: 600px;
+    flex: 1 1 80px;
+  }
+  .selectLabel select {
+    width: 100%;
+  }
+  .catalogFilters {
+    flex-wrap: wrap;
+  }
+  .filterTrigger {
+    width: 20vw;
+    gap: 6px;
+  }
+}

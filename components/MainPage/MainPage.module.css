@@ -1,3 +1,19 @@
+.heroPromo {
+  width: 100%;
+  overflow: hidden;
+}
+.heroPromo a,
+.heroPromo picture {
+  display: block;
+  width: 100%;
+}
+
+.heroPromo img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 15px;
+}
 .HeroWrap {
   padding: 0 20px;
   position: relative;

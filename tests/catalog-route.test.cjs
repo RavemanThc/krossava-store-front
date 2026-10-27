@@ -65,3 +65,22 @@ test('encoded and decoded Cyrillic segments resolve to the same category', () =>
  }
  assert.deepEqual(decodeRouteSegments(['bad%']),['bad%']);
 });
+
+
+test('changing a brand clears model and page while preserving other filters', () => {
+ const {filterHref}=loaded.exports;
+ const url=new URL(filterHref('/sneakers/термо','brand=Nike&model=Air+Max+90&page=3&size=42&search=Black','brand','Adidas'),'https://example.com');
+ assert.equal(url.searchParams.get('brand'),'Adidas');
+ assert.equal(url.searchParams.has('model'),false);
+ assert.equal(url.searchParams.has('page'),false);
+ assert.equal(url.searchParams.get('size'),'42');
+ assert.equal(url.searchParams.get('search'),'Black');
+});
+test('changing a model preserves brand and clearing the final filter returns the category URL', () => {
+ const {filterHref}=loaded.exports;
+ const url=new URL(filterHref('/sneakers/термо','brand=New+Balance&page=2','model','9060'),'https://example.com');
+ assert.equal(url.searchParams.get('brand'),'New Balance');
+ assert.equal(url.searchParams.get('model'),'9060');
+ assert.equal(url.searchParams.has('page'),false);
+ assert.equal(filterHref('/sneakers/nike','model=Air+Max+90&page=3','model',''),'/sneakers/nike');
+});

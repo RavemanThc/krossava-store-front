@@ -12,7 +12,7 @@ import { categoryPath, categorySlug, decodeRouteSegments } from "@/src/lib/catal
 
 type Props = {
   params: Promise<{ slug?: string[] }>;
-  searchParams: Promise<{ search?: string; category?: string; size?: string; page?: string }>;
+  searchParams: Promise<{ search?: string; category?: string; brand?: string; model?: string; size?: string; page?: string }>;
 };
 
 const getProduct = cache(async (id: string) => {
@@ -48,7 +48,7 @@ async function resolveCategory(slug: string[], query: Awaited<Props["searchParam
   const path = categoryPath(category);
   if (!slug.length || `/sneakers/${encodeURIComponent(slug[0])}` !== path || query.category) {
     const params = new URLSearchParams();
-    for (const key of ["search", "size", "page"] as const) {
+    for (const key of ["search", "brand", "model", "size", "page"] as const) {
       if (query[key]) params.set(key, query[key]);
     }
     permanentRedirect(params.size ? `${path}?${params}` : path);

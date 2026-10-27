@@ -3,7 +3,7 @@ import CategorySelect from "@/components/Filters/CategorySelect";
 import { fetchSneackers } from "@/src/lib/api";
 import { getCategories } from "@/src/lib/catalog-server";
 import PaginationButton from "@/components/Pagination/Pagination";
-import SizeFilter from "@/components/Filters/SizeFilter";
+import CatalogFilters from "@/components/Filters/CatalogFilters";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import RecentlyViewed from "@/components/RecentlyViewed/RecentlyViewed";
@@ -24,7 +24,7 @@ export async function catalogMetadata({
   searchParams,
   category,
 }: PageProps): Promise<Metadata> {
-  const { search, size, page } = await searchParams;
+  const { search, brand, model, size, page } = await searchParams;
   const pageNumber = catalogPageNumber(page);
   let title = category ? `${category} — каталог взуття` : "Каталог кросівок";
   if (search) title = `Пошук «${search}»${category ? ` — ${category}` : ""}`;
@@ -32,6 +32,8 @@ export async function catalogMetadata({
   const params = new URLSearchParams();
   if (search) params.set("search", search);
   if (size) params.set("size", size);
+  if (brand) params.set("brand", brand);
+  if (model) params.set("model", model);
   const canonical = catalogPageHref(
     category ? categoryPath(category) : "/sneakers",
     params.toString(),
@@ -43,7 +45,7 @@ export async function catalogMetadata({
     description,
     alternates: { canonical },
     openGraph: { title, description, url: canonical },
-    robots: { index: !search && !size, follow: true },
+    robots: { index: !search && !size && !brand && !model, follow: true },
   };
 }
 
@@ -51,13 +53,15 @@ export default async function CatalogPage({
   searchParams,
   category,
 }: PageProps) {
-  const { search, size, page } = await searchParams;
+  const { search, brand, model, size, page } = await searchParams;
   const currentPage = catalogPageNumber(page);
   const [categories, data] = await Promise.all([
     getCategories(),
     fetchSneackers({
       search: search?.trim() || undefined,
       category,
+      brand: brand?.trim() || undefined,
+      model: model?.trim() || undefined,
       size: size?.trim() || undefined,
       page: currentPage,
     }),
@@ -75,7 +79,7 @@ export default async function CatalogPage({
       </h1>
       {currentPage === 1 && !search && <p>{catalogDescription(category)}</p>}
       <PaginationButton currentPage={data.page} totalPages={data.totalPages} />
-      <SizeFilter />
+      <CatalogFilters filters={data.filters} />
       {data.products.length ? (
         <SneakerClient sneakers={data.products} />
       ) : (

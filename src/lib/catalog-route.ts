@@ -1,6 +1,8 @@
 export type CatalogQuery = {
   search?: string;
   category?: string;
+  brand?: string;
+  model?: string;
   size?: string;
   page?: string;
 };
@@ -44,4 +46,12 @@ export function decodeRouteSegments(slug: string[]): string[] {
     try { return decodeURIComponent(segment); }
     catch { return segment; }
   });
+}
+
+export function filterHref(pathname: string, query: string, key: "brand" | "model" | "size", value: string): string {
+  const params = new URLSearchParams(query);
+  if (value) params.set(key, value); else params.delete(key);
+  if (key === "brand") params.delete("model");
+  params.delete("page");
+  return params.size ? `${pathname}?${params}` : pathname;
 }

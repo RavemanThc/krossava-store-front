@@ -1,606 +1,181 @@
-# 👟 Krossava Store
+# Krossava — Sneaker Storefront
 
-A full-stack sneaker e-commerce platform built with **Next.js 16**, **React 19**, **TypeScript**, **Node.js**, **Express.js**, **MongoDB**, **Algolia Search**, and an **AI-powered shopping assistant**.
+A Ukrainian-language e-commerce storefront built with **Next.js 16, React 19 and TypeScript**. Customers can browse seasonal collections, narrow results by brand, model and available size, explore product galleries and submit orders through a Telegram-connected checkout.
 
-Krossava provides a responsive online storefront with fast product search, filtering, shopping cart functionality, automated product synchronization, Telegram order notifications, SEO optimization, and an AI assistant that helps customers find suitable sneakers using natural-language queries.
+The full-stack project also handles the operational side of a store: supplier stock synchronization, SKU-based photo matching, search indexing and cleanup of assets belonging to sold-out products.
 
----
+[Store website](https://krossava.com.ua) · [Backend repository](https://github.com/RavemanThc/krossava-store-server) · [Author: Vlad Harkusha](https://github.com/RavemanThc)
 
-## 🚀 Live Demo
+> This README describes the repository implementation. The deployed website may lag behind the latest local changes.
 
-🌐 **Website:** https://krossava.com.ua
+## Project at a glance
 
----
+| Area | Implementation |
+| --- | --- |
+| Storefront | Next.js App Router, Server Components and interactive React components |
+| Catalog discovery | Algolia search, dependent facets and URL-based pagination |
+| Product pages | Readable URLs with stable IDs, image gallery and available sizes |
+| Shopping flow | Persistent cart, quantity limits, validated checkout and Telegram delivery |
+| Data pipeline | Easydrop → MongoDB → Algolia; Telegram comment photos → Cloudinary |
+| Discoverability | Dynamic metadata, canonical URLs, structured data and cursor-backed sitemap |
+| Quality | TypeScript, ESLint, Node test runner and integration-focused backend tests |
 
-## 📸 Preview
+## Customer experience
 
-> Add screenshots here.
+- Browse brand categories, seasonal collections, sale items and large sizes.
+- Search the catalog and share URLs that retain the selected filters and page.
+- In a **brand category**, select a model and size without choosing the brand twice.
+- In a **seasonal or sale category**, select a brand, then a model and size. Counts and options reflect the active filters and stock.
+- View the supplier's main image alongside additional photos in a swipeable product gallery.
+- Keep a cart between visits, adjust quantities within available stock and revisit recently viewed products.
+- Submit a validated order for delivery to the store's Telegram chat.
+- Use a chat-style catalog search with links to matching products.
 
-| Home                | Catalog                | Product                | AI Assistant      |
-| ------------------- | ---------------------- | ---------------------- | ----------------- |
-| `preview-home.webp` | `preview-catalog.webp` | `preview-product.webp` | `preview-ai.webp` |
+The current chat implementation searches Algolia. It does not use an LLM, Redis-backed conversation memory or an n8n agent.
 
----
+## Engineering decisions
 
-# ✨ Features
+### One route family for catalog and product pages
 
-### 🛍️ E-commerce
+[`app/sneakers/[[...slug]]/page.tsx`](app/sneakers/[[...slug]]/page.tsx) resolves the catalog root, category pages and product URLs. Product links combine a readable name with a stable database ID; route helpers handle Unicode category names and canonical redirects.
 
-- 👟 Sneaker catalog
-- 🔍 Full-text product search
-- 📂 Category filtering
-- 📏 Size filtering
-- 💰 Price filtering
-- 📄 Pagination
-- 🛒 Shopping cart
-- 📦 Checkout form
-- 📲 Telegram order notifications
-- 👁️ Recently viewed products
-- 📱 Fully responsive interface
-
-### 🤖 AI Shopping Assistant
-
-- Natural-language sneaker search
-- Ukrainian-language customer communication
-- Search by brand and model
-- Search by size
-- Search by gender
-- Search by price
-- Search by season/category
-- Product availability lookup
-- Product recommendations
-- Direct links to matching products
-- Product cards directly inside the chat
-- Conversation context
-- API-based product data
-- Rate limiting to control AI API usage
-
-### ⚙️ Automation
-
-- Automatic supplier product synchronization
-- Automatic MongoDB updates
-- Automatic Algolia indexing
-- GitHub Actions scheduled workflows
-
-### 🔎 SEO
-
-- Dynamic metadata
-- Open Graph
-- Twitter Cards
-- Canonical URLs
-- Dynamic sitemap
-- robots.txt
-- Schema.org structured data
-- Dynamic product metadata
-
----
-
-# 🤖 AI Shopping Assistant
-
-Krossava includes an AI-powered shopping assistant that allows customers to search the product catalog using natural language.
-
-For example:
+Examples:
 
 ```text
-"Покажи чорні Nike 41 розміру на осінь"
-
-"Мені потрібні жіночі New Balance до 2500 грн"
-
-"Які є зимові Nike?"
-
-"Покажи ще варіанти"
+/sneakers
+/sneakers/nike
+/sneakers/new-balance?model=9060&size=42
+/sneakers/термо?brand=New+Balance&model=9060
+/sneakers/<product-name>-<product-id>
 ```
 
-The assistant extracts search parameters from the customer's message and queries the real Krossava product catalog.
+Changing a brand clears the previous model and page. Changing a model or size resets pagination while preserving other filters. Direct links and browser navigation therefore reproduce the same selection.
 
-Example extracted parameters:
+### Search facets come from the catalog
 
-```json
-{
-  "query": "Nike Black",
-  "size": "41",
-  "gender": "",
-  "category": "Термо",
-  "minPrice": 0,
-  "maxPrice": 999999,
-  "page": 1
-}
+The API returns available brands, models and sizes with counts. The frontend renders those results instead of maintaining a separate hard-coded model list. Unknown model names remain accessible through the broader brand and size filters.
+
+Brand pages include that brand's products across supplier collections. A seasonal page retains its category constraint when a customer adds a brand filter.
+
+### Server rendering with focused client-side state
+
+Catalog and product data are loaded on the server. Client components handle filters, the gallery, cart and checkout interactions. Category lookups are shared and cached for five minutes; the category cache does not store prices or stock.
+
+Turbopack development output uses `.next-turbo`, separately from the production `.next` directory. Remote image sources are explicitly configured for Easydrop and Cloudinary.
+
+### SEO is part of routing and data access
+
+- Product and category metadata, Open Graph information and canonical URLs.
+- Product, offer, breadcrumb, organization and store structured data.
+- Search and additional filter combinations marked `noindex` to limit duplicate indexed pages.
+- A dynamic sitemap that reads products through a MongoDB cursor endpoint, independently of Algolia's searchable-page limit.
+- Supplier HTML descriptions sanitized before rendering.
+
+These are implementation choices, not a claim of measured ranking gains or a guaranteed Lighthouse score.
+
+## Architecture
+
+```mermaid
+flowchart LR
+    Visitor[Customer] --> Next[Next.js storefront]
+    Next --> API[Express API]
+    API --> Search[Algolia: search and facets]
+    API --> DB[(MongoDB: products and stock)]
+    API --> Orders[Telegram: order notifications]
+    Next --> Images[Cloudinary / Easydrop images]
+    Sync[GitHub Actions: daily synchronization] --> DB
+    Sync --> Search
+    Sync --> Images
 ```
 
-The AI never relies on generated product information. Product names, prices, available sizes, images, and product IDs are retrieved from the store API.
+The frontend never needs MongoDB credentials, an Algolia administration key, Cloudinary secrets or a Telegram session. Integrations that require those credentials run in the backend or synchronization workflow.
 
----
+## Stack
 
-## 🧠 AI Architecture
+| Responsibility | Tools |
+| --- | --- |
+| Rendering and routing | Next.js 16, React 19, TypeScript |
+| HTTP and server-state tooling | Axios, TanStack Query |
+| Persistent client state | Zustand |
+| Forms and validation | Formik, Yup |
+| Styling and interaction | CSS Modules, Swiper, GSAP, React Icons |
+| Content handling | sanitize-html |
+| Development and checks | Turbopack, ESLint, TypeScript, Node test runner |
+
+## Run locally
+
+Use **Node.js 22 or newer** and npm. A configured backend with MongoDB and Algolia is required to browse a populated catalog; this repository does not include a mock catalog.
+
+```bash
+git clone https://github.com/RavemanThc/krossava-store-front.git
+cd krossava-store-front
+npm ci
+```
+
+Create `.env.local` in the project root:
+
+```dotenv
+NEXT_PUBLIC_API_URL=http://localhost:3100
+# Optional: your Google Analytics measurement ID
+NEXT_PUBLIC_GA_ID=
+```
+
+Start the backend on port `3100` using its [setup guide](https://github.com/RavemanThc/krossava-store-server#run-locally), then start the storefront:
+
+```bash
+npm run dev
+```
+
+Open [localhost:3000](http://localhost:3000). To choose another frontend port, use `npm run dev -- --port 3102`.
+
+`NEXT_PUBLIC_*` values are public browser configuration. Never place server credentials in them.
+
+## Commands and verification
+
+| Command | Purpose |
+| --- | --- |
+| `npm run dev` | Start the Turbopack development server |
+| `npm run build` | Create a production build |
+| `npm start` | Serve the production build |
+| `npm test` | Run regression tests |
+| `npx tsc --noEmit` | Check TypeScript types |
+| `npm run lint` | Run the repository ESLint checks |
+
+Frontend tests cover cart identity and stock limits, persisted-cart migration, description sanitization, Unicode routes, canonical product paths, filter transitions, pagination and complete sitemap traversal.
+
+For a release, run the tests, type check, lint and production build, then check catalog navigation, filter changes and checkout against the intended backend. No benchmark scores are asserted in this README.
+
+## Repository guide
 
 ```text
-Customer
-   │
-   ▼
-Next.js Chat UI
-   │
-   ▼
-Express API
-   │
-   ├── Rate Limiting / Redis
-   │
-   ▼
-n8n Webhook
-   │
-   ▼
-AI Agent
-   │
-   ├── OpenAI
-   │
-   ├── Conversation Memory
-   │
-   └── AI Tools
-   │        │
-   │        ├── search_products
-   │        ├── get_product_details
-   │        ├── check_availability
-   │        ├── get_store_info
-   │        ├── create_order
-   │        └── notify_admin
-   │
-   ▼
-Krossava API
-   │
-   ├── Algolia
-   ├── MongoDB
-   └── Telegram
+app/                         App Router pages, metadata, sitemap and robots
+  sneakers/[[...slug]]/       Catalog/category/product route resolution
+components/
+  Catalog/                   Server-rendered catalog and product views
+  Filters/                   Category and dependent filter controls
+  Cart/                      Cart and checkout form
+  ChatBot/                   Chat-style catalog search
+src/
+  lib/                       API client, route helpers and category cache
+  store/                     Cart and browsing-history state
+types/                       Shared frontend data contracts
+tests/                       Regression tests
 ```
-
-The AI Agent does not have direct access to the database. It communicates with the store through controlled API endpoints.
-
-This keeps product information consistent with the actual catalog and prevents the assistant from inventing prices, sizes, or availability.
-
----
-
-# 🔍 AI Product Search
-
-The AI product search endpoint supports structured filters extracted from natural-language queries.
-
-Supported parameters:
-
-```text
-query
-size
-gender
-category
-minPrice
-maxPrice
-page
-sortOrder
-limit
-```
-
-Example:
-
-```http
-GET /ai/products?query=Nike&size=41&category=Термо&page=1
-```
-
-The backend converts these parameters into Algolia search queries and filters.
-
-Results returned to the AI are intentionally minimized:
-
-```json
-{
-  "total": 24,
-  "count": 6,
-  "page": 1,
-  "totalPages": 4,
-  "products": []
-}
-```
-
-This reduces unnecessary AI context and token consumption.
-
----
-
-# 💬 Conversation Memory
-
-The chatbot maintains conversation context using a session identifier.
-
-This allows conversations such as:
-
-```text
-Customer:
-Покажи Nike 41 розміру
-
-AI:
-Ось доступні варіанти...
-
-Customer:
-А чорні?
-
-AI:
-Ось чорні Nike 41 розміру...
-
-Customer:
-Ще варіанти
-
-AI:
-Ось наступні моделі...
-```
-
-The customer does not need to repeat all search parameters with every message.
-
----
-
-# 🛡️ AI Rate Limiting
-
-AI requests are rate-limited to prevent excessive API usage and abuse.
-
-The backend uses **Redis** to track chat request limits.
-
-```text
-Customer
-   ↓
-Express
-   ↓
-Rate Limit Check
-   ↓
-n8n
-   ↓
-OpenAI
-```
-
-Requests are counted on the backend rather than relying only on client-side state, preventing users from bypassing limits simply by modifying browser storage.
-
----
-
-# 🛠 Tech Stack
-
-## Frontend
-
-- **Next.js 16**
-- **React 19**
-- **TypeScript**
-- **CSS Modules**
-- **TanStack Query**
-- **Axios**
-- **Zustand**
-- **Formik**
-- **Yup**
-- **React Hot Toast**
-- **React Icons**
-- **Swiper**
-
----
-
-## Backend
-
-- **Node.js**
-- **Express.js**
-- **MongoDB**
-- **Mongoose**
-- **Celebrate / Joi**
-- **Redis**
-- **Axios**
-- **CORS**
-
----
-
-## Search
-
-- **Algolia Search**
-
-Used for:
-
-- Full-text product search
-- Category filtering
-- Size filtering
-- Price filtering
-- AI product search
-- Pagination
-- Price sorting
-
----
-
-## AI & Automation
-
-- **OpenAI**
-- **n8n**
-- **AI Agent**
-- **Conversation Memory**
-- **Tool Calling**
-- **GitHub Actions**
-
----
 
 ## Deployment
 
-- **Vercel** — frontend
-- **Render** — backend
-- **n8n Cloud** — AI workflows
+Set `NEXT_PUBLIC_API_URL` to the deployed API URL before building the frontend. Publish the backend and configure its search facets before deploying a frontend that uses brand/model filtering. Both repositories need the matching API contract.
 
----
+Daily catalog synchronization changes product data without rebuilding the frontend. Its workflow and secrets belong to the backend repository; see the [daily synchronization guide](https://github.com/RavemanThc/krossava-store-server/blob/main/DAILY_SYNC.md).
 
-# 📂 Project Structure
+Site URLs in metadata and the sitemap currently target `krossava.com.ua`. Adapt those settings when deploying a fork under another domain.
 
-```text
-Frontend
-│
-├── app/
-│   ├── sneakers/
-│   ├── cart/
-│   ├── about/
-│   └── ...
-│
-├── components/
-│   ├── ChatBot/
-│   ├── SneakerGrid/
-│   ├── Filters/
-│   ├── Cart/
-│   └── ...
-│
-├── public/
-│
-└── src/
-    ├── hooks/
-    ├── lib/
-    ├── store/
-    └── types/
+## Scope and next steps
 
+The current checkout submits order requests; online payment processing, customer accounts, order tracking, reviews and an administrator dashboard are not implemented. Potential next steps include automated browser regression tests, measured performance budgets and a maintained model-name dictionary for new supplier naming conventions.
 
-Backend
-│
-├── src/
-│   ├── config/
-│   │   ├── algolia.js
-│   │   └── redis.js
-│   │
-│   ├── controllers/
-│   ├── db/
-│   ├── mappers/
-│   ├── middlewares/
-│   ├── models/
-│   └── routers/
-│
-└── scripts/
-```
+## Author
 
----
+**Vlad Harkusha** — [GitHub](https://github.com/RavemanThc)
 
-# ⚙️ Installation
-
-## Clone Repository
-
-```bash
-git clone https://github.com/RavemanThc/krossava-store.git
-```
-
-## Install Dependencies
-
-```bash
-npm install
-```
-
-## Start Frontend
-
-```bash
-npm run dev
-```
-
-## Start Backend
-
-```bash
-npm run dev
-```
-
----
-
-# 🔐 Environment Variables
-
-Never commit real API keys or secrets to GitHub.
-
-## Frontend
-
-```env
-NEXT_PUBLIC_API_URL=
-```
-
-## Backend
-
-```env
-PORT=
-
-MONGODB_URL=
-
-ALGOLIA_APP_ID=
-ALGOLIA_ADMIN_KEY=
-ALGOLIA_INDEX_NAME=
-
-TG_API_KEY=
-TG_ID=
-
-N8N_CHATBOT_URL=
-
-UPSTASH_REDIS_REST_URL=
-```
-
----
-
-# 🔄 Automatic Product Synchronization
-
-Products are synchronized automatically using **GitHub Actions**.
-
-Synchronization pipeline:
-
-```text
-Supplier XML Feed
-       │
-       ▼
-Download & Parse XML
-       │
-       ▼
-Normalize Products
-       │
-       ▼
-MongoDB
-       │
-       ▼
-Algolia Index
-       │
-       ▼
-Updated Store Catalog
-```
-
-The process keeps product information, prices, sizes, and search data synchronized with the supplier catalog.
-
----
-
-# 🔎 SEO
-
-The project implements modern technical SEO practices.
-
-### Metadata
-
-- Dynamic Metadata API
-- Product-specific metadata
-- Open Graph
-- Twitter Cards
-- Canonical URLs
-
-### Crawling & Indexing
-
-- `robots.txt`
-- Dynamic `sitemap.xml`
-- Search-engine-friendly product URLs
-
-### Structured Data
-
-Schema.org structured data includes:
-
-- `Organization`
-- `OnlineStore`
-- `Product`
-- `BreadcrumbList`
-
----
-
-# 📦 Main Functionality
-
-Customers can:
-
-- Browse the sneaker catalog
-- Search for sneakers
-- Filter by category
-- Filter by size
-- Filter by price
-- View product details
-- Select available sizes
-- Add products to cart
-- Manage cart quantities
-- Submit orders
-- Receive AI-powered product recommendations
-- Search products using natural language
-
-Store administrators receive order notifications through Telegram.
-
----
-
-# 📱 Responsive Design
-
-The application is optimized for:
-
-- 💻 Desktop
-- 📱 Tablet
-- 📲 Mobile
-
-The AI assistant is also available across screen sizes as a floating chat interface.
-
----
-
-# ⚡ Performance
-
-Implemented optimizations include:
-
-- Next.js Image Optimization
-- Lazy Loading
-- Server Components
-- Code Splitting
-- WebP images
-- Optimized fonts
-- Paginated API responses
-- Algolia-powered search
-- Reduced AI tool responses
-- Reduced AI context/token usage
-
----
-
-# 🔒 Security & Reliability
-
-The application includes:
-
-- Environment-based secrets
-- Backend request validation
-- Joi validation
-- CORS configuration
-- AI request rate limiting
-- Redis-backed rate-limit state
-- Controlled AI tool access
-- Server-side order processing
-- Product data validation
-
-The AI assistant cannot directly modify the product database and receives catalog information through predefined backend APIs.
-
----
-
-# 📊 Lighthouse Goals
-
-- ✅ Performance
-- ✅ Accessibility
-- ✅ Best Practices
-- ✅ SEO
-
----
-
-# 📈 Future Improvements
-
-- User authentication
-- Wishlist
-- Product reviews
-- Favorites
-- Online payment integration
-- Admin dashboard
-- Personalized recommendations
-- AI recommendation improvements
-- Order tracking
-- Product comparison
-
----
-
-# 🎯 Project Goals
-
-Krossava was built not only as an online store, but as a full-stack production-oriented project demonstrating:
-
-- Modern React / Next.js development
-- REST API architecture
-- Database design
-- Search engine integration
-- AI tool calling
-- Workflow automation
-- Redis-based rate limiting
-- Third-party API integration
-- E-commerce architecture
-- SEO optimization
-- Deployment and production infrastructure
-
----
-
-# 📜 License
-
-This project was created for commercial and portfolio purposes.
-
----
-
-# 👨‍💻 Author
-
-**Vlad Harkusha**
-
-GitHub: https://github.com/RavemanThc
-
-Website: https://krossava.com.ua
+This repository is presented as a commercial/portfolio project. No standalone license file is included; clarify reuse permissions with the author.
