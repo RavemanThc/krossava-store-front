@@ -8,11 +8,23 @@ import { fetchSneackersById } from "@/src/lib/api";
 import { productIdFromSlug, productPath } from "@/src/lib/product-route";
 
 import { getCategories } from "@/src/lib/catalog-server";
-import { categoryPath, categorySlug, decodeRouteSegments } from "@/src/lib/catalog-route";
+import {
+  categoryPath,
+  categorySlug,
+  decodeRouteSegments,
+} from "@/src/lib/catalog-route";
+import ProductJsonLd from "@/components/Catalog/ProductJsonLd";
 
 type Props = {
   params: Promise<{ slug?: string[] }>;
-  searchParams: Promise<{ search?: string; category?: string; brand?: string; model?: string; size?: string; page?: string }>;
+  searchParams: Promise<{
+    search?: string;
+    category?: string;
+    brand?: string;
+    model?: string;
+    size?: string;
+    page?: string;
+  }>;
 };
 
 const getProduct = cache(async (id: string) => {
@@ -21,7 +33,8 @@ const getProduct = cache(async (id: string) => {
     if (!product) notFound();
     return product;
   } catch (error) {
-    if (isAxiosError(error) && [400, 404].includes(error.response?.status ?? 0)) notFound();
+    if (isAxiosError(error) && [400, 404].includes(error.response?.status ?? 0))
+      notFound();
     throw error;
   }
 });
@@ -36,17 +49,23 @@ async function resolveProduct(slug: string[]) {
   return product;
 }
 
-
-async function resolveCategory(slug: string[], query: Awaited<Props["searchParams"]>) {
+async function resolveCategory(
+  slug: string[],
+  query: Awaited<Props["searchParams"]>,
+) {
   if (slug.length > 1) notFound();
   if (!slug.length && !query.category) return undefined;
   const categories = await getCategories();
   const category = slug.length
-    ? categories.find(name => categorySlug(name) === slug[0].toLowerCase())
-    : categories.find(name => name === query.category);
+    ? categories.find((name) => categorySlug(name) === slug[0].toLowerCase())
+    : categories.find((name) => name === query.category);
   if (!category) notFound();
   const path = categoryPath(category);
-  if (!slug.length || `/sneakers/${encodeURIComponent(slug[0])}` !== path || query.category) {
+  if (
+    !slug.length ||
+    `/sneakers/${encodeURIComponent(slug[0])}` !== path ||
+    query.category
+  ) {
     const params = new URLSearchParams();
     for (const key of ["search", "brand", "model", "size", "page"] as const) {
       if (query[key]) params.set(key, query[key]);
@@ -56,16 +75,31 @@ async function resolveCategory(slug: string[], query: Awaited<Props["searchParam
   return category;
 }
 
-export async function generateMetadata({ params, searchParams }: Props): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+  searchParams,
+}: Props): Promise<Metadata> {
   const slug = decodeRouteSegments((await params).slug || []);
-  if (productIdFromSlug(slug)) return productMetadata({ sneaker: await resolveProduct(slug) });
+  if (productIdFromSlug(slug))
+    return productMetadata({ sneaker: await resolveProduct(slug) });
   const category = await resolveCategory(slug, await searchParams);
   return catalogMetadata({ searchParams, category });
 }
 
 export default async function SneakersRoute({ params, searchParams }: Props) {
   const slug = decodeRouteSegments((await params).slug || []);
-  if (productIdFromSlug(slug)) return <ProductPage sneaker={await resolveProduct(slug)} />;
+  if (productIdFromSlug(slug)) {
+    const sneaker = await resolveProduct(slug);
+
+    return (
+      <>
+        <ProductJsonLd sneaker={sneaker} />
+        <ProductPage sneaker={sneaker} />
+      </>
+    );
+  }
+
   const category = await resolveCategory(slug, await searchParams);
+
   return <CatalogPage searchParams={searchParams} category={category} />;
 }

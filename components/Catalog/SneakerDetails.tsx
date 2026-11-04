@@ -36,7 +36,10 @@ const SneakerDetailsClient = ({ sneaker }: Props) => {
     });
 
     if (added) toast.success("додано в кошик");
-    else toast.error("Цей розмір відсутній або вся доступна кількість уже в кошику");
+    else
+      toast.error(
+        "Цей розмір відсутній або вся доступна кількість уже в кошику",
+      );
   };
   return (
     <>

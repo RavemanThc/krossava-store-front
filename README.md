@@ -16,7 +16,7 @@ The full-stack project also handles the operational side of a store: supplier st
 | Catalog discovery | Algolia search, dependent facets and URL-based pagination |
 | Product pages | Readable URLs with stable IDs, image gallery and available sizes |
 | Shopping flow | Persistent cart, quantity limits, validated checkout and Telegram delivery |
-| Data pipeline | Easydrop → MongoDB → Algolia; Telegram comment photos → Cloudinary |
+| Data pipeline | Easydrop → MongoDB → Algolia; Telegram comment photos → Cloudflare R2 |
 | Discoverability | Dynamic metadata, canonical URLs, structured data and cursor-backed sitemap |
 | Quality | TypeScript, ESLint, Node test runner and integration-focused backend tests |
 
@@ -61,7 +61,7 @@ Brand pages include that brand's products across supplier collections. A seasona
 
 Catalog and product data are loaded on the server. Client components handle filters, the gallery, cart and checkout interactions. Category lookups are shared and cached for five minutes; the category cache does not store prices or stock.
 
-Turbopack development output uses `.next-turbo`, separately from the production `.next` directory. Remote image sources are explicitly configured for Easydrop and Cloudinary.
+Turbopack development output uses `.next-turbo`, separately from the production `.next` directory. Remote image sources are explicitly configured for Easydrop, the R2 delivery domain and legacy Cloudinary URLs during migration.
 
 ### SEO is part of routing and data access
 
@@ -82,13 +82,13 @@ flowchart LR
     API --> Search[Algolia: search and facets]
     API --> DB[(MongoDB: products and stock)]
     API --> Orders[Telegram: order notifications]
-    Next --> Images[Cloudinary / Easydrop images]
+    Next --> Images[Cloudflare R2 / Easydrop images]
     Sync[GitHub Actions: daily synchronization] --> DB
     Sync --> Search
     Sync --> Images
 ```
 
-The frontend never needs MongoDB credentials, an Algolia administration key, Cloudinary secrets or a Telegram session. Integrations that require those credentials run in the backend or synchronization workflow.
+The frontend never needs MongoDB credentials, an Algolia administration key, Cloudflare R2 secrets or a Telegram session. Integrations that require those credentials run in the backend or synchronization workflow.
 
 ## Stack
 
@@ -179,3 +179,6 @@ The current checkout submits order requests; online payment processing, customer
 **Vlad Harkusha** — [GitHub](https://github.com/RavemanThc)
 
 This repository is presented as a commercial/portfolio project. No standalone license file is included; clarify reuse permissions with the author.
+
+
+Photo storage migration: deploy the R2 image-domain allowlist before switching catalog gallery URLs. See the [backend migration guide](https://github.com/RavemanThc/krossava-store-server/blob/main/R2_MIGRATION.md).

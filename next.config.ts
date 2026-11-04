@@ -30,6 +30,11 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "https",
+        hostname: "img.krossava.com.ua",
+        pathname: "/krossava/telegram/**",
+      },
+      {
+        protocol: "https",
         hostname: "res.cloudinary.com",
         pathname: "/**/image/upload/**",
       },
