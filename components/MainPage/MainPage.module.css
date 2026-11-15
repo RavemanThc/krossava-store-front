@@ -1,18 +1,142 @@
 .heroPromo {
+  position: relative;
+  max-width: 1440px;
   width: 100%;
+  margin: 0 auto 32px;
+  padding: 8px clamp(12px, 3vw, 32px) 0;
+}
+.storyGallery {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: thin;
+  scrollbar-color: #b6accb transparent;
+  padding: 4px 0 12px;
+}
+.storyGalleryItem {
+  flex: 0 0 78%;
+  min-width: 0;
+  scroll-snap-align: start;
+}
+.storyGalleryItem:first-child {
+  margin-left: auto;
+}
+.storyGalleryItem:last-child {
+  margin-right: auto;
+}
+.promoLink {
+  display: block;
+  border-radius: 16px;
+  background: #f4f1f7;
   overflow: hidden;
 }
-.heroPromo a,
-.heroPromo picture {
+.promoLink picture {
   display: block;
-  width: 100%;
+  aspect-ratio: 9 / 16;
+  background: #eeeaf2;
 }
-
-.heroPromo img {
+.promoLink img {
   display: block;
   width: 100%;
-  height: auto;
-  border-radius: 15px;
+  height: 100%;
+  object-fit: contain;
+}
+.promoCaption {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 52px;
+  padding: 12px 14px;
+  font-size: 15px;
+  font-weight: 600;
+}
+.promoControls {
+  position: absolute;
+  top: 50%;
+  left: calc(clamp(12px, 3vw, 32px) + 8px);
+  right: calc(clamp(12px, 3vw, 32px) + 8px);
+  z-index: 1;
+  transform: translateY(-50%);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  pointer-events: none;
+}
+.promoControls button {
+  display: grid;
+  place-items: center;
+  pointer-events: auto;
+  width: 44px;
+  height: 44px;
+  border: 1px solid #d8d0e1;
+  border-radius: 50%;
+  color: #2e213e;
+  background: rgb(255 255 255 / 92%);
+  box-shadow: 0 2px 12px rgb(0 0 0 / 18%);
+  font-size: 28px;
+}
+.promoPreviousIcon {
+  transform: scaleX(-1);
+}
+.promoControls button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+.promoControls button:not(:disabled):hover {
+  background: #e6dff0;
+}
+.promoLink:focus-visible,
+.storyGallery:focus-visible,
+.promoControls button:focus-visible {
+  outline: 2px solid #62509b;
+  outline-offset: -3px;
+}
+@media (min-width: 768px) {
+  .storyGallery {
+    gap: 20px;
+  }
+  .storyGalleryItem {
+    flex-basis: 42%;
+  }
+}
+@media (max-width: 767px) {
+  .storyGallery {
+    gap: 8px;
+  }
+  .storyGalleryItem {
+    flex-basis: 26%;
+  }
+  .promoLink {
+    border-radius: 8px;
+  }
+  .promoCaption {
+    padding: 6px;
+    min-height: 40px;
+    font-size: 10px;
+    gap: 2px;
+    overflow-wrap: anywhere;
+  }
+  .promoCaption > span {
+    display: none;
+  }
+  .promoControls button {
+    width: 32px;
+    height: 32px;
+    font-size: 22px;
+  }
+}
+@media (min-width: 1024px) {
+  .storyGalleryItem {
+    flex-basis: 30%;
+  }
+}
+@media (min-width: 1440px) {
+  .storyGalleryItem {
+    flex-basis: 320px;
+  }
 }
 .HeroWrap {
   padding: 0 20px;

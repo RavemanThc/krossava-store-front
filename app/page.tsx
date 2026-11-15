@@ -4,7 +4,7 @@ import { Metadata } from "next";
 export const metadata: Metadata = {
   metadataBase: new URL("https://krossava.com.ua"),
 
-  title: "Krossava — Купити кросівки | Nike, Adidas, New Balance",
+  title: { absolute: "Krossava — Купити кросівки | Nike, Adidas, New Balance" },
   description:
     "Інтернет-магазин Krossava. Купуйте кросівки Nike, Adidas, New Balance та інших брендів. Великий вибір моделей, швидка доставка по всій Україні та доступні ціни.",
 
@@ -38,8 +38,8 @@ export const metadata: Metadata = {
     images: [
       {
         url: "/Heroimg.webp",
-        width: 1200,
-        height: 630,
+        width: 1897,
+        height: 1200,
         alt: "Krossava — Інтернет-магазин кросівок",
       },
     ],
