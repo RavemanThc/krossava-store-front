@@ -19,6 +19,56 @@ export default function CategorySelect({ categories, current = "" }: Props) {
     });
   }, [current]);
 
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const mobile = window.matchMedia("(max-width: 1023px)");
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    let interval: ReturnType<typeof setInterval> | undefined;
+    let interacted = false;
+
+    const stop = () => {
+      clearInterval(interval);
+      interval = undefined;
+    };
+    const update = () => {
+      stop();
+      if (!mobile.matches || reducedMotion.matches || interacted) return;
+
+      interval = setInterval(() => {
+        if (document.hidden) return;
+        const maxScroll = container.scrollWidth - container.clientWidth;
+        if (maxScroll <= 0) return;
+        container.scrollLeft = container.scrollLeft >= maxScroll - 1
+          ? 0
+          : container.scrollLeft + 1;
+      }, 30);
+    };
+    const onInteraction = () => {
+      interacted = true;
+      stop();
+    };
+
+    container.addEventListener("pointerdown", onInteraction);
+    container.addEventListener("mouseenter", onInteraction);
+    container.addEventListener("focusin", onInteraction);
+    container.addEventListener("wheel", onInteraction, { passive: true });
+    mobile.addEventListener("change", update);
+    reducedMotion.addEventListener("change", update);
+    update();
+
+    return () => {
+      stop();
+      container.removeEventListener("pointerdown", onInteraction);
+      container.removeEventListener("mouseenter", onInteraction);
+      container.removeEventListener("focusin", onInteraction);
+      container.removeEventListener("wheel", onInteraction);
+      mobile.removeEventListener("change", update);
+      reducedMotion.removeEventListener("change", update);
+    };
+  }, []);
+
   return (
     <div className={css.filterallwrap}>
       <div
