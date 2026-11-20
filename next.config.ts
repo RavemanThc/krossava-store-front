@@ -27,6 +27,9 @@ const nextConfig: NextConfig = {
   experimental: { turbopackFileSystemCacheForDev: false },
 
   images: {
+    // Serve originals directly: hosted image optimization currently returns 402.
+    // Keep next/image sizing and lazy loading without the paid proxy dependency.
+    unoptimized: true,
     remotePatterns: [
       {
         protocol: "https",
