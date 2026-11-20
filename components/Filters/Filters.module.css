@@ -141,10 +141,10 @@
 .catalogFilters {
   display: flex;
   flex-wrap: nowrap;
-  width: 100%;
   align-items: end;
   gap: 2px;
   margin: 20px 10px;
+  justify-content: space-between;
 }
 .selectLabel {
   display: flex;
@@ -188,6 +188,7 @@
   font-size: 14px;
   flex-basis: 100%;
   min-height: 20px;
+  display: none;
 }
 @media (max-width: 480px) {
   .selectLabel {
@@ -205,12 +206,11 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 6px;
-  width: 100%;
   min-height: 44px;
+  width: 12vw;
   padding: 10px 12px;
   border: 1px solid #bcb9c8;
-  border-radius: 10px;
+  border-radius: 50%;
   background: #fff;
   color: #18151f;
   font: inherit;
@@ -299,6 +299,14 @@
     transition: none;
   }
 }
+@media (min-width: 428px) {
+  .filterStatus {
+    display: block;
+  }
+  .filterTrigger {
+    border-radius: 16px;
+  }
+}
 @media (min-width: 1024px) {
   .selectLabel {
     max-width: 600px;
@@ -309,9 +317,5 @@
   }
   .catalogFilters {
     flex-wrap: wrap;
-  }
-  .filterTrigger {
-    width: 20vw;
-    gap: 6px;
   }
 }

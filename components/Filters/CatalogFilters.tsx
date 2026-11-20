@@ -35,8 +35,8 @@ export default function CatalogFilters({ filters }: Props) {
         value={selected}
         options={options}
         disabled={pending || disabled}
-        placeholder={disabled ? "Спочатку оберіть бренд" : "Всі"}
-        onChange={value => change(key, value)}
+        placeholder={disabled ? "" : "Всі"}
+        onChange={(value) => change(key, value)}
       />
     );
   };
@@ -67,9 +67,6 @@ export default function CatalogFilters({ filters }: Props) {
           Скинути фільтри
         </button>
       )}
-      <span className={css.filterStatus} role="status">
-        {pending ? "Оновлюємо товари…" : ""}
-      </span>
     </div>
   );
 }

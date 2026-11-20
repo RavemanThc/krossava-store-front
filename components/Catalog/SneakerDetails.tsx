@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Size, Sneaker } from "@/types/sneaker";
 import css from "./SneakerDetails.module.css";
 import ProductGallery from "./ProductGallery";
+import SizeChart from "./SizeChart";
 import toast from "react-hot-toast";
 import { useCart } from "@/src/store/cart";
 import { useRouter } from "next/navigation";
@@ -26,7 +27,7 @@ const SneakerDetailsClient = ({ sneaker }: Props) => {
   const handleAddToCart = () => {
     if (!selectedSize) {
       toast.error("Оберіть розмір");
-      return;
+      return false;
     }
 
     const added = addToCart({
@@ -40,6 +41,7 @@ const SneakerDetailsClient = ({ sneaker }: Props) => {
       toast.error(
         "Цей розмір відсутній або вся доступна кількість уже в кошику",
       );
+    return added;
   };
   return (
     <>
@@ -61,7 +63,17 @@ const SneakerDetailsClient = ({ sneaker }: Props) => {
           <p className={css.article}>арт: {sneaker.barcode}</p>
           <p>{sneaker.category}</p>
           {/* SIZE SELECT */}
-          <p>Розміри:</p>
+          <div className={css.sizeHeading}>
+            <span>Розміри:</span>
+            <SizeChart
+              name={sneaker.name}
+              rows={sneaker.sizeChart || []}
+              sizes={sneaker.sizes}
+              selectedSize={selectedSize?.size ?? null}
+              onSelectSize={setSelectedSize}
+              onAddToCart={handleAddToCart}
+            />
+          </div>
           <ul className={`${css.wrapsize} ${css.leftSide}`}>
             {sneaker.sizes.map((sizeObj, index) => (
               <li key={index} className={css.size}>

@@ -26,6 +26,7 @@ export interface Sneaker {
   images?: string[];
   description: string;
   sizes: Size[];
+  sizeChart?: { size: string; cm: number }[];
   barcode: string;
   updatedAt?: string;
 }
