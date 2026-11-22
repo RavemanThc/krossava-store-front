@@ -129,6 +129,9 @@ export default function OrderForm() {
           </fieldset>
 
           <p className={css.managerText}>
+            Доставка — 70–150 грн залежно від населеного пункту, оплачується окремо. Точну вартість уточнюйте у менеджера.
+          </p>
+          <p className={css.managerText}>
             Наш менеджер зв&#39;яжеться з вами для уточнення деталей замовлення.
           </p>
 

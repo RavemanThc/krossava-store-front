@@ -7,14 +7,16 @@ import ProductGallery from "./ProductGallery";
 import SizeChart from "./SizeChart";
 import toast from "react-hot-toast";
 import { useCart } from "@/src/store/cart";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useHistoryStore } from "@/src/store/historyStore";
 type Props = {
   sneaker: Sneaker;
+  initialSize?: string;
 };
 
-const SneakerDetailsClient = ({ sneaker }: Props) => {
-  const [selectedSize, setSelectedSize] = useState<Size | null>(null);
+const SneakerDetailsClient = ({ sneaker, initialSize }: Props) => {
+  const [selectedSize, setSelectedSize] = useState<Size | null>(() => sneaker.sizes.find(size => size.size === initialSize && size.quantity > 0) ?? null);
   const addToCart = useCart((state) => state.addToCart);
   const router = useRouter();
   const addToHistory = useHistoryStore((state) => state.addToHistory);
@@ -62,6 +64,8 @@ const SneakerDetailsClient = ({ sneaker }: Props) => {
 
           <p className={css.article}>арт: {sneaker.barcode}</p>
           <p>{sneaker.category}</p>
+          <p className={css.purchaseTerms}>Доставка протягом 2 днів з моменту оформлення замовлення. Вартість — 70–150 грн залежно від населеного пункту. <Link href="/delivery">Умови доставки</Link></p>
+          <p className={css.purchaseTerms}>Повернення та обмін протягом 14 днів з моменту отримання за умови збереження товарного вигляду. <Link href="/return-and-exchange-policy">Докладніше</Link></p>
           {/* SIZE SELECT */}
           <div className={css.sizeHeading}>
             <span>Розміри:</span>

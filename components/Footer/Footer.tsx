@@ -56,6 +56,12 @@ export default function Footer() {
                 Правила повернення та обміну
               </Link>
             </li>
+            <li>
+              <Link href="/contacts" className={`${css.link} ${pathname === "/contacts" ? css.active : ""}`}>
+                Контакти
+              </Link>
+            </li>
+            <li><Link href="/delivery" className={`${css.link} ${pathname === "/delivery" ? css.active : ""}`}>Доставка</Link></li>
           </ul>
         </nav>
       </div>

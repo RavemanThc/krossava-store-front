@@ -7,6 +7,7 @@ import {
 } from "@/types/sneaker";
 
 import axios from "axios";
+import { orderCategories } from "./category-order";
 
 export const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
@@ -31,7 +32,7 @@ export const fetchSneackersById = async (id: string) => {
 };
 export const fetchCategories = async (): Promise<CategoriesResponse> => {
   const { data } = await api.get<CategoriesResponse>("/categories");
-  return data;
+  return orderCategories(data);
 };
 export const fetchHistorySneackers = async (ids: string[]) => {
   const { data } = await api.get<Sneaker[]>("/sneackers/history", {

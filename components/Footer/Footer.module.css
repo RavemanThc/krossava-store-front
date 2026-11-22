@@ -37,7 +37,9 @@
   }
   .list {
     flex-direction: row;
-    margin-left: 220px;
+    margin-left: auto;
+    padding-left: 32px;
+    flex-wrap: wrap;
     margin-top: 0;
     font-size: 14px;
   }

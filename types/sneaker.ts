@@ -21,6 +21,7 @@ export interface Sneaker {
   title: string;
   name: string;
   category: string;
+  brand?: string;
   price: number;
   image: string;
   images?: string[];

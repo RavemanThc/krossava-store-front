@@ -5,7 +5,7 @@ import { productPath } from "@/src/lib/product-route";
 import SneakerDetailsClient from "./SneakerDetails";
 import RecentlyViewed from "@/components/RecentlyViewed/RecentlyViewed";
 
-type Props = { sneaker: Sneaker };
+type Props = { sneaker: Sneaker; initialSize?: string };
 
 export async function productMetadata({ sneaker }: Props): Promise<Metadata> {
   const image = sneaker.image.startsWith("http")
@@ -52,52 +52,8 @@ export async function productMetadata({ sneaker }: Props): Promise<Metadata> {
   };
 }
 
-export default function ProductPage({ sneaker }: Props) {
+export default function ProductPage({ sneaker, initialSize }: Props) {
 
-  const image = sneaker.image.startsWith("http")
-    ? sneaker.image
-    : `https://krossava.com.ua${sneaker.image}`;
-
-  const product = {
-    "@context": "https://schema.org",
-    "@type": "Product",
-
-    "@id": `https://krossava.com.ua${productPath(sneaker)}`,
-
-    name: sneaker.name,
-    image: [...new Set([image, ...(sneaker.images || [])])],
-    description: sneaker.description,
-
-    sku: sneaker.barcode,
-
-    category: sneaker.category,
-
-    brand: {
-      "@type": "Brand",
-      name: sneaker.category,
-    },
-
-    offers: {
-      "@type": "Offer",
-      url: `https://krossava.com.ua${productPath(sneaker)}`,
-      price: sneaker.price,
-      priceCurrency: "UAH",
-      availability: sneaker.sizes.some(size => size.quantity > 0)
-        ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
-      itemCondition: "https://schema.org/NewCondition",
-
-      priceValidUntil: "2027-12-31",
-
-      seller: {
-        "@type": "Organization",
-        name: "Krossava",
-      },
-    },
-
-    url: `https://krossava.com.ua${productPath(sneaker)}`,
-
-    mainEntityOfPage: `https://krossava.com.ua${productPath(sneaker)}`,
-  };
   const breadcrumb = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
@@ -124,12 +80,12 @@ export default function ProductPage({ sneaker }: Props) {
   };
   return (
     <>
-      <SneakerDetailsClient key={sneaker.id} sneaker={{ ...sneaker, description: sanitizeHtml(sneaker.description || "") }} />
+      <SneakerDetailsClient key={`${sneaker.id}-${initialSize || ""}`} initialSize={initialSize} sneaker={{ ...sneaker, description: sanitizeHtml(sneaker.description || "") }} />
 
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify([product, breadcrumb]).replace(/</g, "\\u003c"),
+          __html: JSON.stringify(breadcrumb).replace(/</g, "\\u003c"),
         }}
       />
       <RecentlyViewed />

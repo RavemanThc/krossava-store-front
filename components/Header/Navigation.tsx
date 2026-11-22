@@ -34,13 +34,10 @@ export default function Navigation({ onNavigate }: NavigationProps) {
           </Link>
         </li>
 
+
         <li className={styles.navigationLi}>
-          <Link
-            href="/about"
-            onClick={onNavigate}
-            className={styles.navigationLink}
-          >
-            Про нас
+          <Link href="/contacts" onClick={onNavigate} className={styles.navigationLink}>
+            Контакти
           </Link>
         </li>
       </ul>

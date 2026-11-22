@@ -29,12 +29,21 @@ export default function ProductJsonLd({ sneaker }: Props) {
     image: [...new Set(images)],
     description,
     sku: sneaker.barcode || sneaker.id,
-    category: sneaker.category,
+    category: "Взуття",
+    ...(sneaker.brand ? { brand: { "@type": "Brand", name: sneaker.brand } } : {}),
     url,
     offers: {
       "@type": "Offer",
       url,
       priceCurrency: "UAH",
+      itemCondition: "https://schema.org/NewCondition",
+      hasMerchantReturnPolicy: {
+        "@type": "MerchantReturnPolicy",
+        applicableCountry: "UA",
+        returnPolicyCategory: "https://schema.org/MerchantReturnFiniteReturnWindow",
+        merchantReturnDays: 14,
+        merchantReturnLink: `${SITE_URL}/return-and-exchange-policy`,
+      },
       price: Number(sneaker.price),
       availability: available
         ? "https://schema.org/InStock"

@@ -150,3 +150,6 @@
   flex-wrap: wrap;
   gap: 12px;
 }
+
+.purchaseTerms { font-size: 14px; line-height: 1.6; margin: 12px 0; }
+.purchaseTerms a { text-decoration: underline; text-underline-offset: 3px; }

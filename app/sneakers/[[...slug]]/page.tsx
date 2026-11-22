@@ -94,7 +94,7 @@ export default async function SneakersRoute({ params, searchParams }: Props) {
     return (
       <>
         <ProductJsonLd sneaker={sneaker} />
-        <ProductPage sneaker={sneaker} />
+        <ProductPage sneaker={sneaker} initialSize={(await searchParams).size} />
       </>
     );
   }

@@ -1,3 +1,4 @@
+import { contacts } from "@/src/lib/contacts";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Script from "next/script";
@@ -139,11 +140,15 @@ const organization = {
   url: "https://krossava.com.ua",
   logo: "https://krossava.com.ua/Logo.webp",
 
-  sameAs: ["https://instagram.com/kro.ssava"],
+  sameAs: [contacts.instagram, contacts.telegram],
+  telephone: contacts.phone,
+  email: contacts.email,
 
   contactPoint: {
     "@type": "ContactPoint",
     contactType: "customer service",
+    telephone: contacts.phone,
+    email: contacts.email,
     areaServed: "UA",
     availableLanguage: ["uk", "ru"],
   },
@@ -159,7 +164,9 @@ const store = {
   acceptedPaymentMethod: ["Visa", "MasterCard"],
   areaServed: "UA",
 
-  sameAs: ["https://instagram.com/kro.ssava"],
+  sameAs: [contacts.instagram, contacts.telegram],
+  telephone: contacts.phone,
+  email: contacts.email,
 };
 const website = {
   "@context": "https://schema.org",

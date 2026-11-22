@@ -6,6 +6,6 @@ import { fetchCategories } from "./api";
 // Only category names are cached; prices and stock still come from fresh requests.
 export const getCategories = cache(unstable_cache(
   fetchCategories,
-  ["catalog-categories", process.env.NEXT_PUBLIC_API_URL || ""],
+  ["catalog-categories-seasonal-first", process.env.NEXT_PUBLIC_API_URL || ""],
   { revalidate: 300 },
 ));
